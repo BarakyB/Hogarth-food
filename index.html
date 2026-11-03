@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#f5f5f7">
+<title>אוכלים בחוגר</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --accent:#FF5A1F;
+  --accent-soft:rgba(255,90,31,.12);
+  --bg:#f5f5f7; --card:#ffffff; --label:#1d1d1f; --label2:rgba(60,60,67,.62); --label3:rgba(60,60,67,.34);
+  --sep:rgba(60,60,67,.12); --fill:rgba(120,120,128,.12); --fill2:rgba(120,120,128,.08);
+  --mat:rgba(245,245,247,.72);
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 6px 20px rgba(0,0,0,.06);
+  --green:#1f9d55; --red:#d4361c;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Hebrew","Heebo",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#000;--card:#1c1c1e;--label:#f5f5f7;--label2:rgba(235,235,245,.6);--label3:rgba(235,235,245,.3);
+  --sep:rgba(84,84,88,.5);--fill:rgba(118,118,128,.24);--fill2:rgba(118,118,128,.16);--mat:rgba(0,0,0,.66);
+  --shadow:0 1px 2px rgba(0,0,0,.3);--green:#32d74b;--red:#ff6b52}
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--label);font-family:var(--font);
+  -webkit-font-smoothing:antialiased;letter-spacing:-.01em}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+input{font:inherit}
+.wrap{max-width:560px;margin:0 auto;padding:0 0 calc(40px + env(safe-area-inset-bottom))}
+
+/* ---------- header ---------- */
+.nav{position:sticky;top:0;z-index:20;backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);
+  background:var(--mat);border-bottom:.5px solid transparent;transition:border-color .25s}
+.nav.scrolled{border-bottom-color:var(--sep)}
+.nav-in{max-width:560px;margin:0 auto;padding:10px 20px 10px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.mini-title{font-weight:600;font-size:17px;opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s}
+.nav.scrolled .mini-title{opacity:1;transform:none}
+.loc-pill{display:flex;align-items:center;gap:6px;background:var(--fill);border-radius:999px;padding:7px 12px 7px 14px;
+  font-size:15px;font-weight:600;max-width:62%;transition:transform .2s cubic-bezier(.3,1.4,.5,1)}
+.loc-pill:active{transform:scale(.95)}
+.loc-pill svg{flex:none;color:var(--accent)}
+.loc-pill span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.loc-pill .chev{color:var(--label3)}
+
+.hero-title{padding:6px 20px 2px}
+.hero-title h1{margin:0;font-size:34px;line-height:1.08;font-weight:800;letter-spacing:-.025em}
+.hero-title p{margin:6px 0 0;color:var(--label2);font-size:15px;line-height:1.35}
+
+/* search */
+.search{margin:14px 20px 0;display:flex;align-items:center;gap:8px;background:var(--fill);border-radius:12px;padding:0 12px;height:40px}
+.search svg{color:var(--label2);flex:none}
+.search input{flex:1;border:0;background:none;outline:none;color:var(--label);font-size:17px;height:100%}
+.search input::placeholder{color:var(--label2)}
+
+/* chips */
+.chips{display:flex;gap:8px;overflow-x:auto;padding:12px 20px 4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;height:34px;padding:0 14px;border-radius:999px;background:var(--card);box-shadow:inset 0 0 0 .5px var(--sep);
+  font-size:15px;font-weight:500;display:flex;align-items:center;gap:6px;transition:background .2s,color .2s,transform .25s cubic-bezier(.3,1.5,.5,1)}
+.chip:active{transform:scale(.93)}
+.chip.on{background:var(--label);color:var(--bg);box-shadow:none}
+
+.banner{margin:12px 20px 0;padding:12px 14px;border-radius:14px;background:var(--accent-soft);font-size:14px;line-height:1.4}
+.banner b{font-weight:600}
+
+/* sections */
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;padding:26px 20px 10px}
+.sec-h h2{margin:0;font-size:22px;font-weight:700;letter-spacing:-.02em}
+.sec-h small{color:var(--label2);font-size:14px}
+
+/* pick card */
+.pick{margin:0 20px;border-radius:22px;background:var(--card);box-shadow:var(--shadow);overflow:hidden;position:relative}
+.pick-art{height:132px;display:flex;align-items:center;justify-content:center;font-size:68px;
+  background:radial-gradient(120% 120% at 80% 0%,var(--accent-soft),transparent 60%),var(--fill2)}
+.pick-body{padding:16px 18px 18px}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--accent);text-transform:uppercase}
+.pick-body h3{margin:4px 0 4px;font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.meta{color:var(--label2);font-size:14px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.dot{width:3px;height:3px;border-radius:50%;background:var(--label3)}
+.row-btns{display:flex;gap:10px;margin-top:14px}
+.btn{flex:1;height:46px;border-radius:14px;font-weight:600;font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:transform .25s cubic-bezier(.3,1.5,.5,1),opacity .2s;text-decoration:none}
+.btn:active{transform:scale(.96)}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.tint{background:var(--accent-soft);color:var(--accent)}
+.btn.gray{background:var(--fill);color:var(--label)}
+
+/* carousel */
+.car{display:flex;gap:12px;overflow-x:auto;padding:2px 20px 6px;scroll-snap-type:x mandatory;scrollbar-width:none;scroll-padding:0 20px}
+.car::-webkit-scrollbar{display:none}
+.tile{flex:none;width:200px;scroll-snap-align:start;background:var(--card);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;text-align:right;
+  transition:transform .3s cubic-bezier(.3,1.4,.5,1)}
+.tile:active{transform:scale(.96)}
+.tile-art{height:92px;display:flex;align-items:center;justify-content:center;font-size:44px;background:var(--fill2);position:relative}
+.tile-b{padding:10px 12px 12px}
+.tile-b .t{font-weight:600;font-size:15px;line-height:1.25;height:2.5em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.tile-b .meta{font-size:13px;margin-top:4px}
+.badge{position:absolute;top:8px;inset-inline-start:8px;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--card);color:var(--label)}
+.badge.open{color:var(--green)}
+.badge.closed{color:var(--label2)}
+
+/* list */
+.list{margin:0 20px;background:var(--card);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
+.item{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;text-align:right;position:relative;transition:background .15s}
+.item:active{background:var(--fill2)}
+.item+.item::before{content:"";position:absolute;top:0;right:70px;left:0;border-top:.5px solid var(--sep)}
+.ico{flex:none;width:46px;height:46px;border-radius:12px;background:var(--fill2);display:flex;align-items:center;justify-content:center;font-size:24px}
+.item .mid{flex:1;min-width:0}
+.item .t{font-weight:600;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .s{color:var(--label2);font-size:13px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .end{flex:none;text-align:left;font-size:13px;color:var(--label2);font-variant-numeric:tabular-nums}
+.item .end b{display:block;color:var(--label);font-size:15px;font-weight:600}
+.st{font-weight:600}
+.st.open{color:var(--green)} .st.closed{color:var(--label2)} .st.soon{color:var(--accent)}
+.tag{display:inline-block;font-size:11px;font-weight:600;padding:1px 6px;border-radius:6px;background:var(--fill);color:var(--label2);margin-inline-start:4px;vertical-align:1px}
+.more{display:block;margin:12px auto 0;color:var(--accent);font-weight:600;font-size:16px;padding:8px 16px}
+.empty{padding:28px 20px;text-align:center;color:var(--label2);font-size:15px}
+.foot{padding:28px 24px 0;color:var(--label3);font-size:12px;line-height:1.5;text-align:center}
+
+/* ---------- sheets ---------- */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.32);opacity:0;pointer-events:none;z-index:40}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0 auto;max-width:560px;background:var(--card);
+  border-radius:22px 22px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.18);transform:translateY(110%);
+  padding-bottom:calc(16px + env(safe-area-inset-bottom));max-height:88vh;display:flex;flex-direction:column;touch-action:none;will-change:transform}
+.grab{padding:8px 0 4px;display:flex;justify-content:center;cursor:grab}
+.grab i{width:36px;height:5px;border-radius:3px;background:var(--label3)}
+.sheet-c{overflow-y:auto;padding:4px 20px 0;touch-action:pan-y;overscroll-behavior:contain}
+.d-art{height:110px;border-radius:16px;background:radial-gradient(120% 120% at 80% 0%,var(--accent-soft),transparent 60%),var(--fill2);
+  display:flex;align-items:center;justify-content:center;font-size:58px;margin-top:6px}
+.d-h{margin:14px 0 4px;font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.kv{margin-top:16px;background:var(--fill2);border-radius:14px}
+.kv div{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;font-size:15px}
+.kv div+div{border-top:.5px solid var(--sep)}
+.kv span:first-child{color:var(--label2)}
+.kv span:last-child{font-weight:500;text-align:left}
+.note{color:var(--label2);font-size:12px;margin-top:10px;line-height:1.45}
+
+.loc-search{display:flex;align-items:center;gap:8px;background:var(--fill);border-radius:12px;padding:0 12px;height:40px;margin-top:10px}
+.loc-search input{flex:1;border:0;background:none;outline:none;color:var(--label);font-size:17px}
+.gps{display:flex;align-items:center;gap:12px;width:100%;padding:14px 4px;text-align:right;font-weight:600;font-size:16px;color:var(--accent)}
+.gps .ic{width:34px;height:34px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center}
+.gps-msg{font-size:13px;color:var(--label2);padding:0 4px 8px;line-height:1.4}
+.locs{border-top:.5px solid var(--sep)}
+.locs button{display:flex;justify-content:space-between;width:100%;padding:13px 4px;font-size:17px;text-align:right;border-bottom:.5px solid var(--sep)}
+.locs button small{color:var(--label2);font-size:14px}
+.locs button.sel{color:var(--accent);font-weight:600}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;z-index:60;
+  background:var(--label);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;font-weight:500;transition:all .35s cubic-bezier(.3,1.4,.5,1);pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* budget */
+.bud{margin:16px 20px 0;background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:18px 18px 16px}
+.bud-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.bud-l small{display:block;color:var(--label2);font-size:13px;font-weight:600}
+.bud-amt{font-size:40px;font-weight:800;letter-spacing:-.035em;line-height:1.05;margin-top:2px;font-variant-numeric:tabular-nums}
+.bud-amt span{font-size:20px;font-weight:600;color:var(--label2);letter-spacing:-.01em}
+.win{flex:none;font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--fill);color:var(--label2);white-space:nowrap}
+.win.on{background:rgba(31,157,85,.12);color:var(--green)}
+.bar{height:8px;border-radius:4px;background:var(--fill);margin:14px 0 4px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:4px;background:var(--accent);transition:width .7s cubic-bezier(.3,1.2,.5,1)}
+.bar-l{display:flex;justify-content:space-between;font-size:12px;color:var(--label2);font-variant-numeric:tabular-nums}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.stat{background:var(--fill2);border-radius:14px;padding:10px 10px 9px}
+.stat b{display:block;font-size:20px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat small{font-size:12px;color:var(--label2);line-height:1.25;display:block;margin-top:1px}
+.bud .row-btns{margin-top:14px}
+.hist{margin-top:12px;border-top:.5px solid var(--sep)}
+.hist-i{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--sep);font-size:14px}
+.hist-i .mid{flex:1;min-width:0}
+.hist-i .mid div{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist-i .mid small{color:var(--label2)}
+.hist-i b{font-variant-numeric:tabular-nums}
+.x{width:28px;height:28px;border-radius:50%;background:var(--fill);color:var(--label2);display:flex;align-items:center;justify-content:center;font-size:15px;flex:none}
+.sync{font-size:11px;color:var(--label3);margin-top:8px;text-align:center}
+
+/* meal sheet */
+.field{margin-top:14px}
+.field>span{display:block;font-size:13px;color:var(--label2);font-weight:600;margin:0 4px 6px}
+.inp{width:100%;height:46px;border-radius:12px;border:0;background:var(--fill);color:var(--label);padding:0 14px;font-size:17px;outline:none}
+.amt-row{display:flex;align-items:center;gap:10px}
+.step{width:46px;height:46px;border-radius:12px;background:var(--fill);font-size:22px;font-weight:500;flex:none;transition:transform .2s cubic-bezier(.3,1.5,.5,1)}
+.step:active{transform:scale(.9)}
+.amt-row .inp{text-align:center;font-weight:700;font-size:22px;font-variant-numeric:tabular-nums}
+.quick{display:flex;gap:8px;margin-top:8px}
+.quick button{flex:1;height:34px;border-radius:10px;background:var(--fill2);font-size:14px;font-weight:600}
+.warn{margin-top:12px;padding:10px 12px;border-radius:12px;background:rgba(212,54,28,.09);color:var(--red);font-size:13px;line-height:1.4}
+.warn:empty{display:none}
+.sugg{max-height:180px;overflow:auto;border-radius:12px;background:var(--fill2);margin-top:6px}
+.sugg:empty{display:none}
+.sugg button{display:block;width:100%;text-align:right;padding:10px 14px;font-size:15px;border-bottom:.5px solid var(--sep)}
+.sugg button small{color:var(--label2)}
+
+/* info */
+.info{margin:0 20px;display:flex;flex-direction:column;gap:12px}
+.card{background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:16px 16px}
+.card h3{margin:0 0 8px;font-size:17px;font-weight:700}
+.card p,.card li{font-size:14px;line-height:1.5;color:var(--label2);margin:0}
+.card ul{margin:0;padding:0 18px 0 0}
+.card li+li{margin-top:4px}
+.card b{color:var(--label);font-weight:600}
+.contact{display:flex;gap:10px;margin-top:10px}
+.contact a{flex:1;text-decoration:none;color:inherit;background:var(--fill2);border-radius:14px;padding:12px;transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
+.contact a:active{transform:scale(.96)}
+.contact small{display:block;font-size:12px;color:var(--label2);font-weight:600}
+.contact b{display:block;font-size:17px;white-space:nowrap;font-weight:700;margin-top:2px;direction:ltr;text-align:right;color:var(--accent)}
+.seg{display:flex;background:var(--fill);border-radius:10px;padding:2px;margin-top:10px;position:relative}
+.seg button{flex:1;height:32px;border-radius:8px;font-size:13px;font-weight:600;position:relative;z-index:1;transition:color .2s}
+.seg .knob{position:absolute;top:2px;bottom:2px;border-radius:8px;background:var(--card);box-shadow:0 3px 8px rgba(0,0,0,.12),0 0 0 .5px rgba(0,0,0,.04);
+  transition:right .45s cubic-bezier(.3,1.3,.5,1),width .45s cubic-bezier(.3,1.3,.5,1)}
+.fb-types{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.fb-types button{height:34px;padding:0 12px;border-radius:999px;background:var(--fill);font-size:14px;font-weight:600;transition:background .2s,color .2s,transform .25s cubic-bezier(.3,1.5,.5,1)}
+.fb-types button:active{transform:scale(.93)}
+.fb-types button.on{background:var(--label);color:var(--bg)}
+textarea.inp{height:120px;padding:12px 14px;resize:none;line-height:1.4}
+.flip{animation:pop .5s cubic-bezier(.3,1.5,.5,1)}
+@keyframes pop{0%{transform:scale(.94);opacity:.4}100%{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <button class="loc-pill" id="locBtn" aria-label="שינוי מיקום">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+      <span id="locName">בחר מיקום</span>
+      <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="mini-title">מה אוכלים?</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero-title">
+    <h1>מה אוכלים?</h1>
+    <p id="sub">מסעדות הזכאות בחוגר, לפי המרחק ממך</p>
+  </div>
+
+  <section class="bud" id="bud">
+    <div class="bud-top">
+      <div class="bud-l"><small id="budMonth">יתרת תקציב</small><div class="bud-amt" id="budAmt">594 <span>₪</span></div></div>
+      <div class="win" id="win"></div>
+    </div>
+    <div class="bar"><i id="budBar" style="width:100%"></i></div>
+    <div class="bar-l"><span id="budUsed">נוצלו 0 ₪</span><span>מתוך 594 ₪</span></div>
+    <div class="stats">
+      <div class="stat"><b id="sToday">44.5</b><small>₪ להיום</small></div>
+      <div class="stat"><b id="sUses">12</b><small>מימושים נותרו</small></div>
+      <div class="stat"><b id="sDays">–</b><small>ימי זכאות נותרו</small></div>
+    </div>
+    <div class="row-btns">
+      <button class="btn primary" id="addMeal">רשום ארוחה</button>
+      <button class="btn gray" id="histBtn">היסטוריה</button>
+    </div>
+    <div class="hist" id="hist" hidden></div>
+    <div class="sync" id="sync"></div>
+  </section>
+
+  <label class="search">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="מסעדה, עיר או סוג אוכל" autocomplete="off">
+  </label>
+
+  <div class="chips" id="chips">
+    <button class="chip" data-f="open">פתוח עכשיו</button>
+    <button class="chip" data-f="win">פתוח בשעות הזכאות</button>
+    <button class="chip" data-f="meat">בשרי</button>
+    <button class="chip" data-f="dairy">חלבי</button>
+    <button class="chip" data-f="hk">כשרות מהדרין</button>
+    <button class="chip" data-f="10">עד 10 ק״מ</button>
+  </div>
+
+  <div id="shabbat"></div>
+
+  <section id="pickSec">
+    <div class="sec-h"><h2>ההמלצה שלי</h2><small id="pickWhy"></small></div>
+    <div class="pick" id="pick"></div>
+  </section>
+
+  <section id="nearSec">
+    <div class="sec-h"><h2>הכי קרוב אליך</h2><small>פתוחים עכשיו</small></div>
+    <div class="car" id="car"></div>
+  </section>
+
+  <section>
+    <div class="sec-h"><h2 id="allTitle">כל המסעדות</h2><small id="count"></small></div>
+    <div class="list" id="list"></div>
+    <button class="more" id="more" hidden>הצג עוד</button>
+  </section>
+
+  <section>
+    <div class="sec-h"><h2>בכל הארץ</h2><small>סניפים כשרים בלבד</small></div>
+    <div class="list" id="chains"></div>
+  </section>
+
+  <section>
+    <div class="sec-h"><h2>הזכאות שלי</h2><small>מדור לוגיסטיקה מפא״ת</small></div>
+    <div class="info">
+      <div class="card">
+        <h3>מוקדי גודי</h3>
+        <p>אם אתה מופיע כמנוי אבל הגודי לא עובד, פנה למוקד.</p>
+        <div class="contact">
+          <a href="tel:*2258"><small>מוקד טלפוני</small><b>*2258</b></a>
+          <a href="https://wa.me/972543664420" target="_blank" rel="noopener"><small>וואטסאפ</small><b>054-366-4420</b></a>
+        </div>
+      </div>
+      <div class="card">
+        <h3>משהו לא עובד?</h3>
+        <p>מסעדה שסגרה, כתובת שגויה, תקלה או רעיון לשיפור? ספר לי ואתקן.</p>
+        <button class="btn tint" style="width:100%;margin-top:12px" data-fb="">שלח הערה או תקלה</button>
+      </div>
+      <div class="card">
+        <h3>מקום השירות שלי</h3>
+        <p id="regionNote"></p>
+        <div class="seg" id="seg"><i class="knob"></i>
+          <button data-r="all">כל הרשימה</button><button data-r="targ">ת״א–ר״ג</button><button data-r="rehovot">רחובות</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>מה מגיע לי</h3>
+        <ul>
+          <li><b>ימים א׳–ה׳, <span dir="ltr">11:00–16:00</span></b></li>
+          <li>עד <b>44.5 ₪</b> ליום במסעדה (המבורגר עד <b>52 ₪</b>)</li>
+          <li>עד <b>594 ₪</b> ועד <b>12 מימושים</b> בחודש</li>
+          <li>זכאי: לובש מדים ללא מענה ממטבח צבאי, לפי ההרשאה שהוגדרה לו</li>
+          <li>ממשים רק במסעדות מורשות ומעודכנות במערכת גודי. הרשימה מתעדכנת מדי חודש</li>
+        </ul>
+      </div>
+      <div class="card" style="box-shadow:inset 0 0 0 1px rgba(212,54,28,.25),var(--shadow)">
+        <h3 style="color:var(--red)">הגבלות</h3>
+        <ul>
+          <li>אין להשתמש בזכאות בזמן חופשה, סיפוח, קורס, מחלה וכו׳</li>
+          <li>הזכאות אישית, יומית ואינה ניתנת להעברה</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🌾 זכאות לצליאקים</h3>
+        <p>זכאים עם צליאק ממשים את הזכאות ב<b>שופרסל שלי / דיל</b> וב<b>קרפור</b>, עד <b>594 ₪</b> בחודש.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="foot">הנתונים מרשימת המסעדות לזכאות חוגר (18.10.26) ומהמדריך של מדור לוגיסטיקה מפא״ת. היתרה מחושבת רק לפי הארוחות שאתה רושם כאן, ואינה מסונכרנת עם מערכת גודי. <a href="#" data-fb="" style="color:var(--accent)">דיווח על תקלה</a> שעות הפתיחה הן לפי הרשימה ואינן כוללות שינויים בשישי, שבת וחגים.
+  המרחק מחושב ממרכז היישוב או מנקודת ציון ידועה, ולכן הוא משוער. הניווט בוויז או בגוגל מפות מוביל לכתובת המדויקת.</p>
+</main>
+
+<div class="scrim" id="scrim"></div>
+
+<div class="sheet" id="detail" role="dialog" aria-modal="true">
+  <div class="grab"><i></i></div>
+  <div class="sheet-c" id="detailC"></div>
+</div>
+
+<div class="sheet" id="locSheet" role="dialog" aria-modal="true">
+  <div class="grab"><i></i></div>
+  <div class="sheet-c">
+    <h2 style="margin:6px 0 2px;font-size:22px;font-weight:700">איפה אתה?</h2>
+    <button class="gps" id="gpsBtn"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21 3L3 10.5l7.5 3 3 7.5z"/></svg></span>המיקום הנוכחי שלי</button>
+    <div class="gps-msg" id="gpsMsg" hidden></div>
+    <label class="loc-search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="color:var(--label2)"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="locQ" type="search" placeholder="חיפוש יישוב או בסיס" autocomplete="off">
+    </label>
+    <div class="locs" id="locs"></div>
+  </div>
+</div>
+
+<div class="sheet" id="mealSheet" role="dialog" aria-modal="true">
+  <div class="grab"><i></i></div>
+  <div class="sheet-c">
+    <h2 style="margin:6px 0 0;font-size:22px;font-weight:700">רישום ארוחה</h2>
+    <label class="field"><span>איפה אכלת?</span>
+      <input class="inp" id="mPlace" placeholder="שם המסעדה" autocomplete="off"></label>
+    <div class="sugg" id="mSugg"></div>
+    <div class="field"><span>סכום</span>
+      <div class="amt-row">
+        <button class="step" data-s="1">+</button>
+        <input class="inp" id="mAmt" inputmode="decimal" value="44.5">
+        <button class="step" data-s="-1">−</button>
+      </div>
+      <div class="quick"><button data-q="44.5">44.5 ₪ ארוחה</button><button data-q="52">52 ₪ המבורגר</button></div>
+    </div>
+    <label class="field"><span>תאריך</span><input class="inp" id="mDate" type="date"></label>
+    <div class="warn" id="mWarn"></div>
+    <button class="btn primary" style="width:100%;margin:16px 0 6px" id="mSave">שמור</button>
+  </div>
+</div>
+
+<div class="sheet" id="fbSheet" role="dialog" aria-modal="true">
+  <div class="grab"><i></i></div>
+  <div class="sheet-c">
+    <h2 style="margin:6px 0 0;font-size:22px;font-weight:700">שליחת הערה</h2>
+    <div class="fb-types" id="fbTypes">
+      <button data-t="תקלה באפליקציה">תקלה</button><button data-t="טעות בפרטי מסעדה">טעות בפרטים</button>
+      <button data-t="מסעדה חסרה">מסעדה חסרה</button><button data-t="הצעה לשיפור">הצעה</button>
+    </div>
+    <label class="field" id="fbRestWrap" hidden><span>מסעדה</span><input class="inp" id="fbRest" autocomplete="off"></label>
+    <label class="field"><span>מה קרה?</span><textarea class="inp" id="fbText" placeholder="למשל: המסעדה עברה כתובת / השעות לא נכונות / הכפתור לא עובד"></textarea></label>
+    <p class="note">ההודעה נפתחת בוואטסאפ, ואתה שולח אותה בעצמך. שום דבר לא נשלח בלי שתלחץ שלח.</p>
+    <a class="btn primary" style="width:100%;margin:12px 0 6px" id="fbSend" target="_blank" rel="noopener">המשך לוואטסאפ</a>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const DATA = {"r": [{"n": "לחם בית אור יהודה", "c": "אור יהודה", "a": "בר לב חיים 10", "k": "בשרי", "h": ["10:00", "17:00"], "hr": "10:00-17:00", "ab": "", "hk": false, "lat": 32.029, "lng": 34.856, "p": false}, {"n": "חומוס אליהו אור יהודה", "c": "אור יהודה", "a": "המפעל 13", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 32.029, "lng": 34.856, "p": false}, {"n": "אצל הטורקי", "c": "אור יהודה", "a": "הראשונים 2", "k": "בשרי", "h": ["11:00", "23:30"], "hr": "11:00-23:30", "ab": "", "hk": false, "lat": 32.029, "lng": 34.856, "p": false}, {"n": "כפות תמרים", "c": "אילת", "a": "קיבוץ אילות 1", "k": "בשרי", "h": ["07:00", "20:30"], "hr": "7:00-20:30", "ab": "", "hk": false, "lat": 29.5577, "lng": 34.9519, "p": false}, {"n": "באגט דולפין אילת", "c": "אילת", "a": "שד התמרים", "k": "בשרי", "h": ["11:00", "00:00"], "hr": "11:00-00:00", "ab": "", "hk": false, "lat": 29.5577, "lng": 34.9519, "p": false}, {"n": "בטעם של קובי", "c": "אילת", "a": "החרש 11, אילת", "k": "בשרי", "h": ["10:00", "17:00"], "hr": "10:00-17:00", "ab": "", "hk": false, "lat": 29.5577, "lng": 34.9519, "p": false}, {"n": "ג'קניס אילת", "c": "אילת", "a": "אנפה 1", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 29.5577, "lng": 34.9519, "p": false}, {"n": "זעפרן סירים ושיפודים אילת", "c": "אילת", "a": "הבורסקאי 9", "k": "בשרי", "h": ["11:00", "22:00"], "hr": "11:00-22:00", "ab": "", "hk": false, "lat": 29.5577, "lng": 34.9519, "p": false}, {"n": "עצמון הגדול אילת", "c": "אילת", "a": "המלאכה 1", "k": "בשרי", "h": ["11:00", "23:00"], "hr": "11:00-23:00", "ab": "", "hk": false, "lat": 29.5577, "lng": 34.9519, "p": false}, {"n": "גט שניצל אשדוד", "c": "אשדוד", "a": "הבנאים 5", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 31.8014, "lng": 34.6435, "p": false}, {"n": "ג'ק ביי בלאק", "c": "באר יעקב", "a": "שא נס 17", "k": "בשרי", "h": ["11:00", "22:00"], "hr": "11:00-22:00", "ab": "", "hk": false, "lat": 31.942, "lng": 34.834, "p": false}, {"n": "טרנזיט באר יעקב", "c": "באר יעקב", "a": "שאנס 17", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 31.942, "lng": 34.834, "p": false}, {"n": "השיפודיה של ליברטי", "c": "באר שבע", "a": "דוד המלך 13", "k": "בשרי", "h": ["11:00", "23:00"], "hr": "11:00-23:00", "ab": "", "hk": false, "lat": 31.252, "lng": 34.7915, "p": false}, {"n": "שווארמה של רסקו", "c": "באר שבע", "a": "רגר יצחק", "k": "בשרי", "h": ["09:00", "19:00"], "hr": "09:00-19:00", "ab": "", "hk": false, "lat": 31.252, "lng": 34.7915, "p": false}, {"n": "אלחי בכיכר", "c": "באר שבע", "a": "יוהנה ז'בוטינסקי 11", "k": "בשרי", "h": ["08:00", "22:00"], "hr": "8:00-22:00", "ab": "", "hk": false, "lat": 31.252, "lng": 34.7915, "p": false}, {"n": "התימני רחוב האנרגיה באר שבע", "c": "באר שבע", "a": "האנרגיה 77", "k": "בשרי", "h": ["11:00", "20:00"], "hr": "11:00-20:00", "ab": "", "hk": false, "lat": 31.252, "lng": 34.7915, "p": false}, {"n": "ג'וני קריספי גרנד קניון בש", "c": "באר שבע", "a": "שד טוביהו 125", "k": "בשרי", "h": ["10:30", "22:30"], "hr": "10:30-22:30", "ab": "", "hk": false, "lat": 31.2505, "lng": 34.772, "p": true}, {"n": "תבל באר שבע", "c": "באר שבע", "a": "בית לחם 1", "k": "בשרי", "h": ["12:00", "14:00"], "hr": "12:00-14:00", "ab": "", "hk": false, "lat": 31.252, "lng": 34.7915, "p": false}, {"n": "בית הפול באר שבע תחנה מרכזית", "c": "באר שבע", "a": "בן צבי יצחק 8", "k": "בשרי", "h": ["11:00", "18:00"], "hr": "11:00-18:00", "ab": "", "hk": false, "lat": 31.243, "lng": 34.798, "p": true}, {"n": "בית הפול באר שבע ביג", "c": "באר שבע", "a": "שד' אליהו נאוי 26", "k": "בשרי", "h": ["11:00", "18:00"], "hr": "11:00-18:00", "ab": "", "hk": false, "lat": 31.242, "lng": 34.812, "p": true}, {"n": "בית הפול גרנד קניון באר שבע", "c": "באר שבע", "a": "שד טוביהו דוד 125", "k": "בשרי", "h": ["11:00", "18:00"], "hr": "11:00-18:00", "ab": "", "hk": false, "lat": 31.2505, "lng": 34.772, "p": true}, {"n": "בלאק בר בורגר באר שבע", "c": "באר שבע", "a": "קנטיקה 2", "k": "בשרי", "h": ["11:30", "23:00"], "hr": "11:30-23:00", "ab": "", "hk": false, "lat": 31.252, "lng": 34.7915, "p": false}, {"n": "ג'וני קריספי הבלוק באר שבע", "c": "באר שבע", "a": "רובין ראובן 7", "k": "בשרי", "h": ["11:00", "23:00"], "hr": "11:00-23:00", "ab": "", "hk": false, "lat": 31.252, "lng": 34.7915, "p": false}, {"n": "ג'וני קריספי תחנה מרכזית ב\"ש", "c": "באר שבע", "a": "בן צבי יצחק 4", "k": "בשרי", "h": ["09:00", "21:00"], "hr": "9:00-21:00", "ab": "", "hk": false, "lat": 31.243, "lng": 34.798, "p": true}, {"n": "הבאגט של אורי - העתיקה", "c": "באר שבע", "a": "החלוץ 77", "k": "בשרי", "h": ["10:00", "17:00"], "hr": "10:00-17:00", "ab": "", "hk": false, "lat": 31.252, "lng": 34.7915, "p": false}, {"n": "הדרומית באר שבע", "c": "באר שבע", "a": "צבי טאוב 1", "k": "בשרי", "h": ["12:00", "00:00"], "hr": "12:00-00:00", "ab": "", "hk": false, "lat": 31.252, "lng": 34.7915, "p": false}, {"n": "החומוס של טחינה באר שבע", "c": "באר שבע", "a": "יוסף בן מתתיהו", "k": "בשרי", "h": ["11:00", "18:00"], "hr": "11:00-18:00", "ab": "", "hk": false, "lat": 31.252, "lng": 34.7915, "p": false}, {"n": "פיצריית הגשר", "c": "באר שבע", "a": "יעלים 14", "k": "חלבי", "h": ["11:00", "23:00"], "hr": "11:00-23:00", "ab": "", "hk": false, "lat": 31.252, "lng": 34.7915, "p": false}, {"n": "בורגרים בית שאן", "c": "בית שאן", "a": "שאול המלך 70", "k": "בשרי", "h": ["11:00", "23:00"], "hr": "11:00-23:00", "ab": "", "hk": false, "lat": 32.497, "lng": 35.497, "p": false}, {"n": "מפגש גיל", "c": "בית שאן", "a": "ירושלים הבירה 1", "k": "בשרי", "h": ["08:00", "23:30"], "hr": "8:00-23:30", "ab": "", "hk": false, "lat": 32.497, "lng": 35.497, "p": false}, {"n": "שיפודי הכיכר", "c": "בית שאן", "a": "יצחק שמש 1", "k": "בשרי", "h": ["11:00", "22:00"], "hr": "11:00-22:00", "ab": "", "hk": false, "lat": 32.497, "lng": 35.497, "p": false}, {"n": "יסמין בני ברק", "c": "בני ברק", "a": "מצדה 9", "k": "בשרי", "h": ["10:30", "17:00"], "hr": "10:30-17:00", "ab": "", "hk": false, "lat": 32.084, "lng": 34.834, "p": false}, {"n": "בלאק קפה בני ברק", "c": "בני ברק", "a": "בר כוכבא 23", "k": "חלבי", "h": ["07:00", "16:00"], "hr": "07:00-16:00", "ab": "", "hk": false, "lat": 32.084, "lng": 34.834, "p": false}, {"n": "סביח פרישמן בני ברק", "c": "בני ברק", "a": "דרך בן גוריון 13", "k": "בשרי", "h": ["10:00", "23:00"], "hr": "10:00-23:00", "ab": "", "hk": false, "lat": 32.084, "lng": 34.834, "p": false}, {"n": "פיק אנד מיקס בני ברק", "c": "בני ברק", "a": "בר כוכבא 21", "k": "בשרי", "h": ["10:30", "16:30"], "hr": "10:30-16:30", "ab": "", "hk": false, "lat": 32.084, "lng": 34.834, "p": false}, {"n": "גולדיס בני ברק (כשרות גבוה)", "c": "בני ברק", "a": "מצדה 9", "k": "בשרי", "h": ["11:00", "00:00"], "hr": "11:00-00:00", "ab": "", "hk": true, "lat": 32.084, "lng": 34.834, "p": false}, {"n": "פינתי רמת אשכול", "c": "בני ברק", "a": "כנרת 3", "k": "בשרי", "h": ["11:00", "22:45"], "hr": "11:00-22:45", "ab": "", "hk": false, "lat": 32.084, "lng": 34.834, "p": false}, {"n": "הלובי", "c": "בני ברק", "a": "הלח''י 31", "k": "בשרי", "h": ["08:00", "17:00"], "hr": "8:00-17:00", "ab": "", "hk": true, "lat": 32.084, "lng": 34.834, "p": false}, {"n": "המסעדה היהודית בני ברק", "c": "בני ברק", "a": "כנרת 4", "k": "בשרי", "h": ["07:00", "18:00"], "hr": "7:00-18:00", "ab": "", "hk": true, "lat": 32.084, "lng": 34.834, "p": false}, {"n": "חומוס נרי בני ברק", "c": "בני ברק", "a": "מצדה 7", "k": "בשרי", "h": ["09:00", "18:00"], "hr": "9:00-18:00", "ab": "", "hk": true, "lat": 32.084, "lng": 34.834, "p": false}, {"n": "חומוס מדאמס בני ברק", "c": "בני ברק", "a": "הירקון 5", "k": "בשרי", "h": ["09:00", "17:00"], "hr": "9:00-17:00", "ab": "", "hk": false, "lat": 32.084, "lng": 34.834, "p": false}, {"n": "מסעדת צנעני בני ברק", "c": "בני ברק", "a": "ז'בוטינסקי 92", "k": "בשרי", "h": ["07:00", "00:00"], "hr": "07:00-00:00", "ab": "", "hk": true, "lat": 32.084, "lng": 34.834, "p": false}, {"n": "שומשום בני ברק", "c": "בני ברק", "a": "הירקון 3", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 32.084, "lng": 34.834, "p": false}, {"n": "אצל מלי", "c": "גבעתיים", "a": "הגננת 216", "k": "בשרי", "h": ["11:00", "00:00"], "hr": "11:00-00:00", "ab": "", "hk": false, "lat": 32.071, "lng": 34.81, "p": false}, {"n": "חומוס גבעתיים", "c": "גבעתיים", "a": "ויצמן 10", "k": "בשרי", "h": ["11:00", "15:00"], "hr": "11:00-15:00", "ab": "", "hk": false, "lat": 32.071, "lng": 34.808, "p": true}, {"n": "הטאבון של חיים", "c": "הוד השרון", "a": "רמתיים 86", "k": "בשרי", "h": ["11:00", "23:00"], "hr": "11:00-23:00", "ab": "", "hk": false, "lat": 32.15, "lng": 34.892, "p": false}, {"n": "בהדונס הרצליה", "c": "הרצליה", "a": "המנופים 9", "k": "בשרי", "h": ["11:30", "16:00"], "hr": "11:30-16:00", "ab": "", "hk": false, "lat": 32.1615, "lng": 34.8085, "p": true}, {"n": "בורגרים הרצליה", "c": "הרצליה", "a": "משכית 32", "k": "בשרי", "h": ["11:30", "22:00"], "hr": "11:30-22:00", "ab": "", "hk": false, "lat": 32.1625, "lng": 34.8105, "p": true}, {"n": "חומוס אליהו הרצליה פיתוח", "c": "הרצליה", "a": "משכית 32", "k": "בשרי", "h": ["11:00", "18:00"], "hr": "11:00-18:00", "ab": "", "hk": false, "lat": 32.1625, "lng": 34.8105, "p": true}, {"n": "מאמאמיה הרצליה", "c": "הרצליה", "a": "מדינת היהודים 58", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 32.1663, "lng": 34.8433, "p": false}, {"n": "קובה גוטה", "c": "הרצליה", "a": "המנופים 9", "k": "בשרי", "h": ["11:30", "16:00"], "hr": "11:30-16:00", "ab": "", "hk": false, "lat": 32.1615, "lng": 34.8085, "p": true}, {"n": "שניצל קומפני", "c": "הרצליה", "a": "המנופים 9", "k": "בשרי", "h": ["11:30", "16:00"], "hr": "11:30-16:00", "ab": "", "hk": false, "lat": 32.1615, "lng": 34.8085, "p": true}, {"n": "דניאל חדרה", "c": "חדרה", "a": "הרברט סמואל 57", "k": "בשרי", "h": ["10:00", "14:00"], "hr": "10:00-14:00", "ab": "", "hk": false, "lat": 32.434, "lng": 34.9196, "p": false}, {"n": "פיצה יאנו", "c": "חדרה", "a": "חטיבת הנח\"ל 4", "k": "חלבי", "h": ["09:00", "23:59"], "hr": "09:00-23:59", "ab": "", "hk": false, "lat": 32.434, "lng": 34.9196, "p": false}, {"n": "חמים וטעים(זמן קפה)", "c": "חולון", "a": "הבנאי 19", "k": "בשרי", "h": ["11:30", "17:00"], "hr": "11:30-17:00", "ab": "", "hk": false, "lat": 32.0158, "lng": 34.7874, "p": false}, {"n": "ק", "c": "חולון", "a": "הרוקמים 2", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 32.0158, "lng": 34.7874, "p": false}, {"n": "ווק סטריט חיפה", "c": "חיפה", "a": "שד הנשיא 129", "k": "בשרי", "h": ["10:00", "22:00"], "hr": "10:00-22:00", "ab": "", "hk": false, "lat": 32.794, "lng": 34.9896, "p": false}, {"n": "יעקב קבב חיפה", "c": "חיפה", "a": "העליה השניה 20", "k": "בשרי", "h": ["10:00", "22:00"], "hr": "10:00-22:00", "ab": "", "hk": false, "lat": 32.794, "lng": 34.9896, "p": false}, {"n": "שווארמה גארדן", "c": "חיפה", "a": "שד אבא חושי", "k": "בשרי", "h": ["11:00", "17:00"], "hr": "11:00-17:00", "ab": "", "hk": false, "lat": 32.794, "lng": 34.9896, "p": false}, {"n": "משוואשה מפרץ חיפה", "c": "חיפה", "a": "ההסתדרות 251", "k": "בשרי", "h": ["08:00", "20:00"], "hr": "08:00-20:00", "ab": "", "hk": false, "lat": 32.794, "lng": 34.9896, "p": false}, {"n": "שווארמה פלפלת חיפה", "c": "חיפה", "a": "ההגנה 20", "k": "בשרי", "h": ["10:00", "23:00"], "hr": "10:00-23:00", "ab": "", "hk": false, "lat": 32.794, "lng": 34.9896, "p": false}, {"n": "המקום של שימי טבריה", "c": "טבריה", "a": "כינרת", "k": "בשרי", "h": ["11:00", "23:00"], "hr": "11:00-23:00", "ab": "", "hk": false, "lat": 32.7922, "lng": 35.5312, "p": false}, {"n": "בורגרים טירת הכרמל", "c": "טירת הכרמל", "a": "מלחמת ששת הימים", "k": "בשרי", "h": ["11:00", "22:00"], "hr": "11:00-22:00", "ab": "", "hk": false, "lat": 32.76, "lng": 34.971, "p": false}, {"n": "חומוס אליהו", "c": "טירת הכרמל", "a": "קרן היסוד 2", "k": "בשרי", "h": ["11:00", "20:00"], "hr": "11:00-20:00", "ab": "", "hk": false, "lat": 32.76, "lng": 34.971, "p": false}, {"n": "בורגרים יבנה", "c": "יבנה", "a": "דואני 6", "k": "בשרי", "h": ["11:00", "22:00"], "hr": "11:00-22:00*", "ab": "", "hk": false, "lat": 31.878, "lng": 34.739, "p": false}, {"n": "חומוס בראשית", "c": "יבנה", "a": "דן 1", "k": "בשרי", "h": ["09:30", "16:00"], "hr": "9:30-16:00", "ab": "", "hk": false, "lat": 31.878, "lng": 34.739, "p": false}, {"n": "צ'וקה יהוד", "c": "יהוד-מונוסון", "a": "דרך דיין משה 3", "k": "בשרי", "h": ["11:00", "23:00"], "hr": "11:00-23:00", "ab": "", "hk": false, "lat": 32.033, "lng": 34.89, "p": false}, {"n": "פלאפל נטו שווארמה", "c": "יוקנעם", "a": "התמר 1", "k": "בשרי", "h": ["11:00", "18:00"], "hr": "11:00-18:00", "ab": "", "hk": false, "lat": 32.659, "lng": 35.11, "p": false}, {"n": "באגט הפעמון גילה", "c": "ירושלים", "a": "הגננת 216", "k": "בשרי", "h": ["11:00", "00:00"], "hr": "11:00-00:00", "ab": "", "hk": false, "lat": 31.7683, "lng": 35.2137, "p": false}, {"n": "פינתי תחנה מרכזית ירושלים", "c": "ירושלים", "a": "יפו 224", "k": "בשרי", "h": ["11:00", "22:30"], "hr": "11:00-22:30", "ab": "", "hk": false, "lat": 31.7683, "lng": 35.2137, "p": false}, {"n": "ואן ליר", "c": "ירושלים", "a": "ז'בוטינסקי 43", "k": "בשרי", "h": ["11:00", "19:00"], "hr": "11:00-19:00", "ab": "", "hk": false, "lat": 31.7683, "lng": 35.2137, "p": false}, {"n": "מפגש השייח תלפיות", "c": "ירושלים", "a": "האומן 23", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 31.7683, "lng": 35.2137, "p": false}, {"n": "ניו דלי ירושלים - מחנה יהודה", "c": "ירושלים", "a": "אגריפס 62", "k": "בשרי", "h": ["11:00", "00:00"], "hr": "11:00-00:00", "ab": "", "hk": false, "lat": 31.7683, "lng": 35.2137, "p": false}, {"n": "בהדונס בית הפעמון כ\"ס", "c": "כפר סבא", "a": "התע\"ש 20", "k": "בשרי", "h": ["07:00", "15:00"], "hr": "7:00-15:00", "ab": "", "hk": false, "lat": 32.175, "lng": 34.907, "p": false}, {"n": "צ'וקה כפר סבא", "c": "כפר סבא", "a": "כצנלסון ברל 13", "k": "בשרי", "h": ["10:30", "22:30"], "hr": "10:30-22:30", "ab": "", "hk": false, "lat": 32.175, "lng": 34.907, "p": false}, {"n": "בית הפרגית", "c": "כרמיאל", "a": "קק\"ל 99", "k": "בשרי", "h": ["11:00", "20:00"], "hr": "11:00-20:00", "ab": "", "hk": false, "lat": 32.919, "lng": 35.295, "p": false}, {"n": "צחי קבבצה כרמיאל", "c": "כרמיאל", "a": "קק\"ל 99", "k": "בשרי", "h": ["12:00", "22:00"], "hr": "12:00-22:00", "ab": "", "hk": false, "lat": 32.919, "lng": 35.295, "p": false}, {"n": "הקבב של אמא איירפורט סיטי", "c": "לוד אירפורט", "a": "גולן 43", "k": "בשרי", "h": ["10:00", "22:00"], "hr": "10:00:22:00", "ab": "", "hk": false, "lat": 31.992, "lng": 34.904, "p": true}, {"n": "ניו דלי מודיעין - ישפרו", "c": "מודיעין", "a": "המכונאי 2", "k": "בשרי", "h": ["10:00", "21:00"], "hr": "10:00-21:00", "ab": "", "hk": false, "lat": 31.898, "lng": 35.01, "p": false}, {"n": "ניו דלי מודיעין - קניון מודיעין", "c": "מודיעין", "a": "ערער 1", "k": "בשרי", "h": ["10:00", "22:00"], "hr": "10:00-22:00", "ab": "", "hk": false, "lat": 31.898, "lng": 35.01, "p": false}, {"n": "שווארמה רפאל", "c": "מודיעין", "a": "דם המכבים 42", "k": "בשרי", "h": ["11:00", "23:00"], "hr": "11:00-23:00", "ab": "", "hk": false, "lat": 31.898, "lng": 35.01, "p": false}, {"n": "המקסיקני", "c": "מצפה רמון", "a": "הנשיא 1", "k": "בשרי", "h": ["11:30", "23:00"], "hr": "11:30-23:00", "ab": "", "hk": false, "lat": 30.61, "lng": 34.801, "p": false}, {"n": "בורגרים נהריה", "c": "נהריה", "a": "ויצמן 63", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 33.005, "lng": 35.098, "p": false}, {"n": "משוואשה נהריה", "c": "נהריה", "a": "הגעתון 50", "k": "בשרי", "h": ["09:00", "20:30"], "hr": "09:00-20:30", "ab": "", "hk": false, "lat": 33.005, "lng": 35.098, "p": false}, {"n": "שווארמה שמש ישפרו סנטר נס ציונה", "c": "נס ציונה", "a": "הפטיש 6", "k": "בשרי", "h": ["11:00", "21:45"], "hr": "11:00-21:45", "ab": "", "hk": false, "lat": 31.929, "lng": 34.798, "p": false}, {"n": "השניצליה", "c": "נשר", "a": "בר יהודה 96", "k": "בשרי", "h": ["11:00", "15:00"], "hr": "11:00-15:00", "ab": "", "hk": false, "lat": 32.766, "lng": 35.044, "p": false}, {"n": "סודקסו בשרי סלקום נתניה", "c": "נתניה", "a": "הגביש 6", "k": "בשרי", "h": ["09:00", "23:59"], "hr": "9:00-23:59", "ab": "", "hk": false, "lat": 32.3215, "lng": 34.8532, "p": false}, {"n": "פלאפל מוסא פולג", "c": "נתניה", "a": "גיבורי ישראל 24", "k": "בשרי", "h": ["11:00", "21:00"], "hr": "11:00-21:00", "ab": "", "hk": false, "lat": 32.3215, "lng": 34.8532, "p": false}, {"n": "בורגרס בר נתניה", "c": "נתניה", "a": "דמארי שושנה 10", "k": "בשרי", "h": ["11:00", "23:45"], "hr": "11:00-23:45", "ab": "", "hk": false, "lat": 32.3215, "lng": 34.8532, "p": false}, {"n": "בית רצון גיבורי ישראל", "c": "נתניה", "a": "גיבורי ישראל 40", "k": "בשרי", "h": ["07:00", "23:00"], "hr": "7:00-23:00", "ab": "", "hk": false, "lat": 32.3215, "lng": 34.8532, "p": false}, {"n": "טיים עוף פולג", "c": "נתניה", "a": "גיבורי ישראל 41", "k": "בשרי", "h": ["11:00", "20:00"], "hr": "11:00-20:00", "ab": "", "hk": false, "lat": 32.3215, "lng": 34.8532, "p": false}, {"n": "מעדני אבי אחד העם נתניה", "c": "נתניה", "a": "אחד העם 17", "k": "בשרי", "h": ["08:00", "17:00"], "hr": "08:00-17:00", "ab": "", "hk": false, "lat": 32.3215, "lng": 34.8532, "p": false}, {"n": "שניצל כושי הגביש", "c": "נתניה", "a": "הגביש 10", "k": "בשרי", "h": ["11:00", "16:07"], "hr": "11:00-16:07", "ab": "", "hk": false, "lat": 32.3215, "lng": 34.8532, "p": false}, {"n": "בורגרים עכו", "c": "עכו", "a": "החרושת 3", "k": "בשרי", "h": ["11:00", "21:00"], "hr": "11:00-21:00", "ab": "", "hk": false, "lat": 32.927, "lng": 35.082, "p": false}, {"n": "מסעדת רם עכו", "c": "עכו", "a": "הארבעה 1", "k": "בשרי", "h": ["09:00", "17:00"], "hr": "9:00-17:00", "ab": "", "hk": false, "lat": 32.927, "lng": 35.082, "p": false}, {"n": "לחם לשם", "c": "עלי זהב", "a": "עלי זהב", "k": "חלבי", "h": ["07:00", "20:00"], "hr": "07:00-20:00", "ab": "", "hk": false, "lat": 32.079, "lng": 35.06, "p": false}, {"n": "האחוזה עפולה", "c": "עפולה", "a": "החשמל 1", "k": "בשרי", "h": ["07:00", "21:00"], "hr": "7:00-21:00", "ab": "", "hk": false, "lat": 32.608, "lng": 35.289, "p": false}, {"n": "בטר בורגר", "c": "פתח תקווה", "a": "רוטשילד 83", "k": "בשרי", "h": ["11:00", "18:00"], "hr": "11:00-18:00", "ab": "", "hk": false, "lat": 32.087, "lng": 34.887, "p": false}, {"n": "בית אוכל מטבח ישראלי", "c": "פתח תקווה", "a": "גיבורי ישראל 40", "k": "בשרי", "h": ["07:00", "23:00"], "hr": "7:00-23:00", "ab": "", "hk": false, "lat": 32.087, "lng": 34.887, "p": false}, {"n": "הבוטקה", "c": "פתח תקווה", "a": "הסיבים 18", "k": "בשרי", "h": ["11:00", "15:00"], "hr": "11:00-15:00", "ab": "", "hk": false, "lat": 32.087, "lng": 34.887, "p": false}, {"n": "שניצל קוקי בזל פתח תקווה", "c": "פתח תקווה", "a": "בזל 1", "k": "בשרי", "h": ["10:00", "19:00"], "hr": "10:00-19:00", "ab": "", "hk": false, "lat": 32.087, "lng": 34.887, "p": false}, {"n": "שומשום שחם פ\"ת", "c": "פתח תקווה", "a": "שחם 3", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 32.087, "lng": 34.887, "p": false}, {"n": "בית הפרגית צפת", "c": "צפת", "a": "ירושלים 98", "k": "בשרי", "h": ["11:00", "01:00"], "hr": "11:00-01:00", "ab": "", "hk": false, "lat": 32.965, "lng": 35.496, "p": false}, {"n": "השניצליה קצרין", "c": "קצרין", "a": "מרכז מסחרי איתן", "k": "בשרי", "h": ["11:00", "17:00"], "hr": "11:00-17:00", "ab": "", "hk": false, "lat": 32.99, "lng": 35.689, "p": false}, {"n": "מאכלי הבית קרית אתא", "c": "קריית אתא", "a": "ההסתדרות 251", "k": "בשרי", "h": ["11:00", "20:00"], "hr": "11:00-20:00", "ab": "", "hk": false, "lat": 32.809, "lng": 35.106, "p": false}, {"n": "משוואשה צור שלום", "c": "קריית ביאליק", "a": "שדרות חן 13", "k": "בשרי", "h": ["08:00", "20:00"], "hr": "08:00-20:00", "ab": "", "hk": false, "lat": 32.833, "lng": 35.085, "p": false}, {"n": "משוואשה קרן היסוד", "c": "קריית ביאליק", "a": "קרן היסוד 12", "k": "בשרי", "h": ["08:00", "20:00"], "hr": "08:00-20:00", "ab": "", "hk": false, "lat": 32.833, "lng": 35.085, "p": false}, {"n": "מוסררה (פינתי תל השומר לשעבר)", "c": "קרית אונו", "a": "קניון גמיון", "k": "בשרי", "h": ["16:00", "23:00"], "hr": "16:00-23:00", "ab": "", "hk": false, "lat": 32.059, "lng": 34.861, "p": true}, {"n": "חומוס בנדא", "c": "קרית ארבע", "a": "בוסאני לוי 10", "k": "בשרי", "h": ["12:00", "21:30"], "hr": "12:00-21:30", "ab": "", "hk": false, "lat": 31.531, "lng": 35.12, "p": false}, {"n": "בורגרים קרית גת", "c": "קרית גת", "a": "מלכי ישראל 170", "k": "בשרי", "h": ["11:00", "18:00"], "hr": "11:00-18:00", "ab": "", "hk": false, "lat": 31.61, "lng": 34.764, "p": false}, {"n": "בית הפול הירוק קרית גת", "c": "קרית גת", "a": "דרך הדרום 3", "k": "בשרי", "h": ["11:00", "18:00"], "hr": "11:00-18:00", "ab": "", "hk": false, "lat": 31.61, "lng": 34.764, "p": false}, {"n": "חומוס אליהו קרית גת", "c": "קרית גת", "a": "שדרות צורן פינת לשם 1", "k": "בשרי", "h": ["07:00", "15:30"], "hr": "7:00-15:30", "ab": "", "hk": false, "lat": 31.61, "lng": 34.764, "p": false}, {"n": "טורו קרית גת", "c": "קרית גת", "a": "דרך הדרום 22", "k": "בשרי", "h": ["10:00", "17:00"], "hr": "10:00-17:00", "ab": "", "hk": false, "lat": 31.61, "lng": 34.764, "p": false}, {"n": "מאמא שניצל", "c": "קרית ים", "a": "ירושלים 50", "k": "בשרי", "h": ["11:00", "15:00"], "hr": "11:00-15:00", "ab": "", "hk": false, "lat": 32.849, "lng": 35.069, "p": false}, {"n": "מסעדת רם דקר קרית מוצקין", "c": "קרית מוצקין", "a": "דקר 5", "k": "בשרי", "h": ["11:00", "15:00"], "hr": "11:00-15:00", "ab": "", "hk": false, "lat": 32.837, "lng": 35.077, "p": false}, {"n": "משוואשה גושן 60", "c": "קרית מוצקין", "a": "גושן 60", "k": "בשרי", "h": ["08:00", "20:00"], "hr": "08:00-20:00", "ab": "", "hk": false, "lat": 32.837, "lng": 35.077, "p": false}, {"n": "משוואשה הילדים", "c": "קרית מוצקין", "a": "הילדים 23", "k": "בשרי", "h": ["08:00", "18:00"], "hr": "08:00-18:00", "ab": "", "hk": false, "lat": 32.837, "lng": 35.077, "p": false}, {"n": "השווארמה שלי מהדרין", "c": "קרית מלאכי", "a": "רשי 7", "k": "בשרי", "h": ["08:30", "21:00"], "hr": "8:30-21:00", "ab": "", "hk": true, "lat": 31.729, "lng": 34.746, "p": false}, {"n": "השניצליה קרית שמונה", "c": "קרית שמונה", "a": "שדרות תל חי 83", "k": "בשרי", "h": ["11:00", "23:00"], "hr": "11:00-23:00", "ab": "", "hk": false, "lat": 33.207, "lng": 35.57, "p": false}, {"n": "גיגס אנטריקוט בר", "c": "קרית שמונה", "a": "סלינגר 4", "k": "בשרי", "h": ["11:00", "20:00"], "hr": "11:00-20:00", "ab": "", "hk": false, "lat": 33.207, "lng": 35.57, "p": false}, {"n": "קאן קאי ראש העין", "c": "ראש העין", "a": "דיין משה 2", "k": "בשרי", "h": ["10:00", "22:45"], "hr": "10:00-22:45", "ab": "", "hk": false, "lat": 32.095, "lng": 34.957, "p": false}, {"n": "שווארמה סמל ראש העין", "c": "ראש העין", "a": "המלאכה 23", "k": "בשרי", "h": ["12:00", "15:30"], "hr": "12:00-15:30", "ab": "", "hk": false, "lat": 32.095, "lng": 34.957, "p": false}, {"n": "ניו דלי ראש פינה", "c": "ראש פינה", "a": "האגס 1", "k": "בשרי", "h": ["11:00", "20:00"], "hr": "11:00-20:00", "ab": "א", "hk": false, "lat": 32.969, "lng": 35.542, "p": false}, {"n": "גיל גורמה", "c": "ראשון לציון", "a": "הגדוד העיברי 56", "k": "בשרי", "h": ["09:00", "18:00"], "hr": "9:00-18:00", "ab": "", "hk": false, "lat": 31.973, "lng": 34.7925, "p": false}, {"n": "חומוס אליהו ראשונים", "c": "ראשון לציון", "a": "נים 2", "k": "בשרי", "h": ["11:00", "15:00"], "hr": "11:00-15:00", "ab": "", "hk": false, "lat": 31.973, "lng": 34.7925, "p": false}, {"n": "ניו דלי ראשון לציון", "c": "ראשון לציון", "a": "גולדה מאיר", "k": "בשרי", "h": ["14:00", "21:00"], "hr": "14:00-21:00", "ab": "", "hk": false, "lat": 31.973, "lng": 34.7925, "p": false}, {"n": "אליסון", "c": "רמלה", "a": "היצירה 19", "k": "בשרי", "h": ["10:00", "16:00"], "hr": "10:00-16:00", "ab": "", "hk": false, "lat": 31.929, "lng": 34.874, "p": false}, {"n": "באגט הזהב של גרשון", "c": "רמלה", "a": "שד הרצל 87", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 31.929, "lng": 34.874, "p": false}, {"n": "ניו דלי רמלה", "c": "רמלה", "a": "רזיאל דוד 1", "k": "בשרי", "h": ["11:00", "20:00"], "hr": "11:00-20:00", "ab": "", "hk": false, "lat": 31.929, "lng": 34.874, "p": false}, {"n": "דרך הפיתה", "c": "רמלה", "a": "שד הרצל 91", "k": "בשרי", "h": ["09:00", "18:00"], "hr": "9:00-18:00", "ab": "", "hk": false, "lat": 31.929, "lng": 34.874, "p": false}, {"n": "מאמאלה ר\"ג", "c": "רמת גן", "a": "דרך אבא הלל 7", "k": "חלבי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 32.083, "lng": 34.801, "p": true}, {"n": "פיתה בשר תל השומר", "c": "רמת גן", "a": "בית חולים תל השומר", "k": "בשרי", "h": ["10:00", "22:00"], "hr": "10:00-22:00", "ab": "", "hk": false, "lat": 32.046, "lng": 34.843, "p": true}, {"n": "מפגש שמש", "c": "רמת גן", "a": "ז'בוטינסקי 155", "k": "בשרי", "h": ["07:00", "00:00"], "hr": "07:00-00:00", "ab": "", "hk": false, "lat": 32.087, "lng": 34.816, "p": true}, {"n": "שומשום הברזל", "c": "תל אביב - רמת החייל", "a": "הברזל 5", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 32.1085, "lng": 34.8395, "p": true}, {"n": "צ'וקה רעננה", "c": "רעננה", "a": "המלאכה 2", "k": "בשרי", "h": ["11:00", "21:59"], "hr": "11:00-21:59", "ab": "", "hk": false, "lat": 32.184, "lng": 34.871, "p": false}, {"n": "שניצל קומפני רעננה", "c": "רעננה", "a": "זרחין 13", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 32.184, "lng": 34.871, "p": false}, {"n": "בורגרים שדרות", "c": "שדרות", "a": "בן יהודה 2", "k": "בשרי", "h": ["11:00", "23:00"], "hr": "11:00-23:00", "ab": "", "hk": false, "lat": 31.525, "lng": 34.596, "p": false}, {"n": "חומוס אליהו שדרות", "c": "שדרות", "a": "פריז 2", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 31.525, "lng": 34.596, "p": false}, {"n": "שניצליה קרליבך", "c": "תל אביב", "a": "קרליבך 10", "k": "בשרי", "h": ["11:00", "20:00"], "hr": "11:00-20:00", "ab": "", "hk": false, "lat": 32.0688, "lng": 34.782, "p": true}, {"n": "שומשום", "c": "תל אביב", "a": "הנחושבת 3", "k": "בשרי", "h": ["07:00", "16:00"], "hr": "07:00-16:00", "ab": "", "hk": false, "lat": 32.11, "lng": 34.838, "p": true}, {"n": "מיתוס גריל בר", "c": "תל אביב", "a": "ויצמן 2", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 32.079, "lng": 34.787, "p": true}, {"n": "בריא סלט ישראלי 30", "c": "תל אביב", "a": "אבן גבירול 30", "k": "בשרי", "h": ["07:00", "16:00"], "hr": "07:00-16:00", "ab": "", "hk": false, "lat": 32.0792, "lng": 34.7812, "p": true}, {"n": "פטרוזיליה", "c": "תל אביב", "a": "אלוף מגן קלמן 3", "k": "בשרי", "h": ["09:00", "17:00"], "hr": "09:00-17:00", "ab": "", "hk": false, "lat": 32.0717, "lng": 34.7865, "p": true}, {"n": "סביח פרישמן", "c": "תל אביב", "a": "אבן גבירול 64", "k": "חלבי", "h": ["11:00", "20:00"], "hr": "11:00-20:00", "ab": "", "hk": false, "lat": 32.084, "lng": 34.7816, "p": true}, {"n": "חומוס אליהו תל אביב שרונה", "c": "תל אביב", "a": "אלוף מגן קלמן 5", "k": "בשרי", "h": ["09:00", "20:00"], "hr": "09:00-20:00", "ab": "", "hk": false, "lat": 32.0717, "lng": 34.7865, "p": true}, {"n": "סודוך קרליבך", "c": "תל אביב", "a": "קרליבך 20", "k": "בשרי", "h": ["11:00", "18:00"], "hr": "11:00-18:00", "ab": "", "hk": false, "lat": 32.0688, "lng": 34.782, "p": true}, {"n": "שומשום תל אביב עתידים", "c": "תל אביב", "a": "דבורה הנביאה 121", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 32.1135, "lng": 34.842, "p": true}, {"n": "פלאפל מיניסטור", "c": "תל אביב", "a": "אבן גבירול 30", "k": "בשרי", "h": ["11:00", "15:00"], "hr": "11:00-15:00", "ab": "", "hk": false, "lat": 32.0792, "lng": 34.7812, "p": true}, {"n": "שומשום יגאל אלון", "c": "תל אביב", "a": "יגאל אלון 94", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 32.071, "lng": 34.793, "p": true}, {"n": "רולדין אבן גבירול", "c": "תל אביב", "a": "אבן גבירול 24", "k": "חלבי", "h": ["08:00", "20:00"], "hr": "8:00-20:00", "ab": "א/ב", "hk": false, "lat": 32.0785, "lng": 34.7812, "p": true}, {"n": "שומשום דובנוב ת\"א", "c": "תל אביב", "a": "דובנוב 10", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 32.078, "lng": 34.784, "p": true}, {"n": "בר גוריון אקספרס תל אביב", "c": "תל אביב", "a": "אבן גבירול 30", "k": "בשרי", "h": ["11:00", "15:30"], "hr": "11:00-15:30", "ab": "", "hk": false, "lat": 32.0792, "lng": 34.7812, "p": true}, {"n": "שומשום הברזל", "c": "תל אביב", "a": "הברזל 5", "k": "חלבי", "h": ["09:00", "18:00"], "hr": "09:00-18:00", "ab": "", "hk": false, "lat": 32.1085, "lng": 34.8395, "p": true}, {"n": "שומשום מנחם בגין 23", "c": "תל אביב", "a": "מנחם בגין (מגדל לווינשטיין) 23", "k": "בשרי", "h": ["11:00", "16:00"], "hr": "11:00-16:00", "ab": "", "hk": false, "lat": 32.063, "lng": 34.776, "p": true}, {"n": "יוסף רמת החייל", "c": "תל אביב - רמת החייל", "a": "הברזל 32", "k": "בשרי", "h": ["07:00", "18:00"], "hr": "07:00-18:00", "ab": "", "hk": false, "lat": 32.1085, "lng": 34.8395, "p": true}, {"n": "בורגרים קרליבך", "c": "תל אביב", "a": "קרליבך 25", "k": "בשרי", "h": ["10:30", "22:45"], "hr": "10:30-22:45", "ab": "", "hk": false, "lat": 32.0688, "lng": 34.782, "p": true}, {"n": "בורגרס בר בן יהודה", "c": "תל אביב", "a": "בן יהודה 2", "k": "בשרי", "h": ["11:00", "23:00"], "hr": "11:00-23:00", "ab": "", "hk": false, "lat": 32.0745, "lng": 34.767, "p": true}, {"n": "בישולים תל אביב", "c": "תל אביב", "a": "קרליבך 23", "k": "בשרי", "h": ["07:00", "15:00"], "hr": "7:00-15:00", "ab": "", "hk": false, "lat": 32.0688, "lng": 34.782, "p": true}, {"n": "דיאנה אקספרס", "c": "תל אביב", "a": "קניון עזריאלי", "k": "בשרי", "h": ["11:00", "15:00"], "hr": "11:00-15:00", "ab": "", "hk": false, "lat": 32.0745, "lng": 34.792, "p": true}, {"n": "פאזל בורגר עזריאלי", "c": "תל אביב", "a": "קניון עזריאלי", "k": "בשרי", "h": ["11:00", "15:00"], "hr": "11:00-15:00", "ab": "", "hk": false, "lat": 32.0745, "lng": 34.792, "p": true}, {"n": "פיקנסין", "c": "תל אביב", "a": "קניון עזריאלי", "k": "בשרי", "h": ["11:00", "15:00"], "hr": "11:00-15:00", "ab": "", "hk": false, "lat": 32.0745, "lng": 34.792, "p": true}, {"n": "פם פם", "c": "תל אביב", "a": "אבן גבירול 30", "k": "בשרי", "h": ["11:00", "15:00"], "hr": "11:00-15:00", "ab": "", "hk": false, "lat": 32.0792, "lng": 34.7812, "p": true}, {"n": "פוד האוס קריית הממשלה ת\"א- בשרי", "c": "תל אביב", "a": "דרך מנחם בגין 125", "k": "בשרי", "h": ["11:30", "14:30"], "hr": "11:30-14:30", "ab": "", "hk": false, "lat": 32.0717, "lng": 34.789, "p": true}, {"n": "פוד האוס קריית הממשלה ת\"א - חלבי", "c": "תל אביב", "a": "דרך מנחם בגין 125", "k": "חלבי", "h": ["07:30", "14:30"], "hr": "7:30-14:30", "ab": "", "hk": false, "lat": 32.0717, "lng": 34.789, "p": true}, {"n": "שומשום", "c": "תל אביב", "a": "דרך מנחם בגין 144", "k": "בשרי", "h": ["10:00", "16:00"], "hr": "10:00-16:00", "ab": "", "hk": false, "lat": 32.0748, "lng": 34.7905, "p": true}], "chains": [{"name": "בונגראנץ-כשר", "note": "בשרי סניפים כשרים בלבד", "hours": "שעות פעילות של הסניף"}, {"name": "מקדונלדס - כשר", "note": "בשרי סניפים כשרים בלבד", "hours": "שעות פעילות של הסניף"}]};
+
+/* ---------- places a user can pick as "where am I" ---------- */
+const PLACES = [
+ ["תל אביב",32.0853,34.7818],["הקריה, תל אביב",32.0730,34.7890],["רמת החייל, תל אביב",32.1090,34.8390],["ירושלים",31.7683,35.2137],
+ ["חיפה",32.7940,34.9896],["באר שבע",31.2520,34.7915],["אילת",29.5577,34.9519],["אשדוד",31.8014,34.6435],["אשקלון",31.6688,34.5743],
+ ["שדרות",31.5250,34.5960],["נתיבות",31.4210,34.5880],["אופקים",31.3120,34.6200],["סעד",31.4730,34.5370],["עלומים",31.4540,34.5140],
+ ["כפר עזה",31.4840,34.5340],["בארי",31.4240,34.4910],["רעים",31.3900,34.4590],["נחל עוז",31.4730,34.4980],["כיסופים",31.3760,34.3980],
+ ["רהט",31.3930,34.7540],["דימונה",31.0690,35.0330],["ערד",31.2590,35.2130],["ירוחם",30.9870,34.9300],["מצפה רמון",30.6100,34.8010],
+ ["קרית גת",31.6100,34.7640],["קרית מלאכי",31.7290,34.7460],["גדרה",31.8130,34.7790],["יבנה",31.8780,34.7390],["רחובות",31.8940,34.8110],
+ ["נס ציונה",31.9290,34.7980],["ראשון לציון",31.9730,34.7925],["חולון",32.0158,34.7874],["בת ים",32.0170,34.7500],["רמלה",31.9290,34.8740],
+ ["לוד",31.9510,34.8950],["איירפורט סיטי",31.9930,34.9030],["באר יעקב",31.9420,34.8340],["מודיעין",31.8980,35.0100],["בית שמש",31.7470,34.9880],
+ ["מעלה אדומים",31.7770,35.2990],["קרית ארבע",31.5310,35.1200],["אריאל",32.1040,35.1730],["עלי זהב",32.0790,35.0600],["שוהם",31.9990,34.9460],
+ ["אור יהודה",32.0290,34.8560],["יהוד-מונוסון",32.0330,34.8900],["קרית אונו",32.0630,34.8550],["רמת גן",32.0700,34.8240],["תל השומר",32.0460,34.8430],
+ ["גבעתיים",32.0710,34.8100],["בני ברק",32.0840,34.8340],["פתח תקווה",32.0870,34.8870],["ראש העין",32.0950,34.9570],["אלעד",32.0520,34.9510],
+ ["הרצליה",32.1663,34.8433],["רמת השרון",32.1460,34.8390],["הוד השרון",32.1500,34.8920],["כפר סבא",32.1750,34.9070],["רעננה",32.1840,34.8710],
+ ["נתניה",32.3215,34.8532],["כפר יונה",32.3170,34.9350],["חדרה",32.4340,34.9196],["קיסריה",32.5190,34.9040],["זכרון יעקב",32.5710,34.9530],
+ ["טירת הכרמל",32.7600,34.9710],["נשר",32.7660,35.0440],["קריית אתא",32.8090,35.1060],["קריית ביאליק",32.8330,35.0850],["קרית מוצקין",32.8370,35.0770],
+ ["קרית ים",32.8490,35.0690],["עכו",32.9270,35.0820],["נהריה",33.0050,35.0980],["כרמיאל",32.9190,35.2950],["יוקנעם",32.6590,35.1100],
+ ["עפולה",32.6080,35.2890],["נצרת",32.7000,35.3000],["נוף הגליל",32.7160,35.3260],["מגדל העמק",32.6770,35.2400],["בית שאן",32.4970,35.4970],
+ ["טבריה",32.7922,35.5312],["צפת",32.9650,35.4960],["ראש פינה",32.9690,35.5420],["קרית שמונה",33.2070,35.5700],["קצרין",32.9900,35.6890],
+ ["בסיס חצרים",31.2340,34.6630],["בסיס נבטים",31.2080,35.0120],["בסיס רמון",30.7760,34.6670],["בסיס עובדה",29.9400,34.9360],["בסיס חצור",31.7630,34.7270],
+ ["בסיס תל נוף",31.8390,34.8220],["בסיס פלמחים",31.8970,34.6900],["בסיס רמת דוד",32.6650,35.1790],["עיר הבה״דים",30.9580,34.7400],["צאלים",31.2000,34.5300]
+];
+const LS = (()=>{try{const k='__t';localStorage.setItem(k,1);localStorage.removeItem(k);return localStorage}catch(e){return null}})();
+const save=(k,v)=>{try{LS&&LS.setItem(k,JSON.stringify(v))}catch(e){}};
+const load=(k,d)=>{try{const v=LS&&LS.getItem(k);return v?JSON.parse(v):d}catch(e){return d}};
+
+const firstVisit=!load('here',null);
+let here = load('here', {name:'תל אביב',lat:32.0853,lng:34.7818,gps:false});
+const filters = new Set(load('filters', []));
+let shown = 25, query = '';
+
+/* ---------- helpers ---------- */
+const $ = s=>document.querySelector(s);
+const esc = s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function km(a,b,c,d){const R=6371,r=Math.PI/180,x=(c-a)*r,y=(d-b)*r;
+  const h=Math.sin(x/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin(y/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
+function fmtKm(k,precise){if(k<1)return (precise?'':'~')+Math.round(k*1000/50)*50+' מ׳';return (precise?'':'~')+(k<10?k.toFixed(1):Math.round(k))+' ק״מ';}
+function emoji(n){const m=[[/בורגר|בורגרס|burger/,'🍔'],[/פיצ/,'🍕'],[/סושי|ווק|קאן קאי/,'🥡'],[/שניצל|עוף|פרגית|קריספי|ג'קניס/,'🍗'],
+ [/שווארמה|פלאפל|סביח|פיתה/,'🥙'],[/חומוס|פול/,'🫘'],[/שיפוד|קבב|גריל|אנטריקוט|הדרומית|עצמון|קבבצה|צ'וקה/,'🍢'],[/באגט|לחם/,'🥖'],
+ [/ניו דלי|מקסיקני/,'🌯'],[/קפה|בלאק קפה|רולדין/,'☕'],[/סלט|פטרוזיליה/,'🥗'],[/מקדונלדס|בורגראנץ|בונגראנץ/,'🍟'],[/מאמאלה/,'🧇']];
+ for(const[r,e]of m)if(r.test(n))return e;return '🍽️';}
+function nowIL(){const p=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jerusalem',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());
+ const g=t=>p.find(x=>x.type===t).value;return{day:g('weekday'),min:(+g('hour')%24)*60+(+g('minute'))};}
+const toMin=s=>{const[h,m]=s.split(':').map(Number);return h*60+m;};
+function status(r,now){
+  if(!r.h)return{open:false,label:'שעות לא ידועות',cls:'closed',rank:2};
+  let o=toMin(r.h[0]),c=toMin(r.h[1]);if(c<=o)c+=1440;let t=now.min;if(t<o&&t+1440<c)t+=1440;
+  const hh=r.h[1]==='00:00'?'חצות':r.h[1];
+  if(t>=o&&t<c){const left=c-t;
+    if(left<=45)return{open:true,label:`נסגר בעוד ${left} דק׳`,cls:'soon',rank:1,left};
+    return{open:true,label:`פתוח עד ${hh}`,cls:'open',rank:0,left};}
+  let until=o-now.min;if(until<0)until+=1440;
+  if(until<=60)return{open:false,label:`נפתח בעוד ${until} דק׳`,cls:'soon',rank:2,until};
+  return{open:false,label:`סגור · נפתח ב־${r.h[0]}`,cls:'closed',rank:3,until};
+}
+/* eligibility window: Sun–Thu 11:00–16:00 */
+const WIN={o:660,c:960,days:['Sun','Mon','Tue','Wed','Thu']};
+function inWindow(r){if(!r.h)return true;let o=toMin(r.h[0]),c=toMin(r.h[1]);if(c<=o)c+=1440;
+  for(let t=WIN.o;t<WIN.c;t+=15){if((t>=o&&t<c)||(t+1440>=o&&t+1440<c))return true;}return false;}
+function winState(now){const day=WIN.days.includes(now.day);
+  if(day&&now.min>=WIN.o&&now.min<WIN.c)return{on:true,label:`זמן זכאות · עד 16:00`};
+  if(day&&now.min<WIN.o)return{on:false,label:'הזכאות נפתחת ב־11:00'};
+  if(now.day==='Thu'||now.day==='Fri'||now.day==='Sat')return{on:false,label:'הזכאות חוזרת ביום א׳'};
+  return{on:false,label:'הזכאות חוזרת מחר ב־11:00'};}
+const REGIONS={
+  targ:{cities:['תל אביב','תל אביב - רמת החייל','רמת גן','גבעתיים','בני ברק'],note:'למשרתי ת״א–ר״ג: מסעדות מורשות באזור תל אביב ורמת גן. הרשימה מסוננת בהתאם.'},
+  rehovot:{cities:['תל אביב','תל אביב - רמת החייל'],note:'למשרתי רחובות: מסעדות תל אביב בלבד, וכן מקדונלד׳ס ברחובות בלבד. זכאות למסעדות ולחנויות נוחות ברחובות צפויה להיפתח בהמשך.'}};
+let region=load('region','all');
+function matches(r){
+  if(filters.has('meat')&&!filters.has('dairy')&&r.k!=='בשרי')return false;
+  if(filters.has('dairy')&&!filters.has('meat')&&r.k!=='חלבי')return false;
+  if(filters.has('hk')&&!r.hk)return false;
+  if(filters.has('open')&&!r.st.open)return false;
+  if(filters.has('win')&&!r.win)return false;
+  if(REGIONS[region]&&!REGIONS[region].cities.includes(r.c))return false;
+  if(filters.has('10')&&r.d>10)return false;
+  if(query){const s=(r.n+' '+r.c+' '+r.a+' '+r.k+' '+r.e).toLowerCase();
+    const syn={'המבורגר':'🍔','בורגר':'🍔','פיצה':'🍕','שניצל':'🍗','עוף':'🍗','שווארמה':'🥙','פלאפל':'🥙','חומוס':'🫘','בשר על האש':'🍢','סושי':'🥡','קפה':'☕','סלט':'🥗'};
+    return query.split(/\s+/).every(w=>s.includes(w)||(syn[w]&&r.e===syn[w]));}
+  return true;
+}
+const nav = r=>{const q=encodeURIComponent(`${r.n} ${r.a} ${r.c}`);return{
+  waze:`https://waze.com/ul?q=${q}&navigate=yes`,
+  gmaps:`https://www.google.com/maps/search/?api=1&query=${q}`}};
+
+/* ---------- render ---------- */
+let rows=[], pickIdx=0, pickPool=[], pickMode='now';
+function compute(){
+  const now=nowIL();
+  rows=DATA.r.map(r=>({...r,e:emoji(r.n),d:km(here.lat,here.lng,r.lat,r.lng),st:status(r,now),win:inWindow(r)}));
+  rows.sort((a,b)=>a.d-b.d);
+  // shabbat banner
+  const sh=$('#shabbat');
+  sh.innerHTML=(now.day==='Sat'&&now.min<20*60)||(now.day==='Fri'&&now.min>14*60)
+    ?`<div class="banner"><b>שבת שלום.</b> רוב המקומות כשרים וסגורים בשבת — השעות כאן הן של ימי חול.</div>`:'';
+}
+function render(){
+  const vis=rows.filter(matches);
+  $('#locName').textContent=here.name;
+  $('#sub').textContent=`${DATA.r.length} מסעדות בזכאות חוגר · מסודרות לפי המרחק מ${here.gps?'המיקום שלך':here.name}`;
+
+  // pick: nearest open, weighted to closer ones
+  const ws=winState(nowIL());
+  pickPool=vis.filter(r=>r.st.open&&r.win&&(r.st.left||0)>30).slice(0,6);
+  if(!pickPool.length)pickPool=vis.filter(r=>r.st.open).slice(0,6);
+  if(!ws.on)pickPool=vis.filter(r=>r.win).slice(0,6);
+  pickMode=ws.on?'now':'later';
+  $('#pickSec').hidden=!pickPool.length;
+  if(pickPool.length){pickIdx=Math.min(pickIdx,pickPool.length-1);drawPick(false);}
+
+  const near=vis.filter(r=>r.st.open).slice(0,10);
+  $('#nearSec').hidden=near.length<2;
+  $('#car').innerHTML=near.map((r,i)=>`<button class="tile" data-i="${rows.indexOf(r)}">
+    <div class="tile-art">${r.e}<span class="badge ${r.st.cls==='soon'?'closed':'open'}">${fmtKm(r.d,r.p)}</span></div>
+    <div class="tile-b"><div class="t">${esc(r.n)}</div><div class="meta"><span class="st ${r.st.cls}">${r.st.label}</span></div></div></button>`).join('');
+
+  $('#count').textContent=`${vis.length} תוצאות`;
+  $('#allTitle').textContent=query||filters.size?'תוצאות':'כל המסעדות';
+  const list=vis.slice(0,shown);
+  $('#list').innerHTML=list.length?list.map(r=>item(r)).join(''):`<div class="empty">לא נמצאו מסעדות. נסה לנקות את הסינון.</div>`;
+  $('#more').hidden=vis.length<=shown;
+  $('#more').textContent=`הצג עוד ${Math.min(25,vis.length-shown)}`;
+
+  document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',filters.has(c.dataset.f)));
+}
+function item(r){
+  return `<button class="item" data-i="${rows.indexOf(r)}"><div class="ico">${r.e}</div>
+    <div class="mid"><div class="t">${esc(r.n)}${r.hk?'<span class="tag">מהדרין</span>':''}${r.k==='חלבי'?'<span class="tag">חלבי</span>':''}${r.win?'':'<span class="tag">מחוץ לשעות הזכאות</span>'}</div>
+    <div class="s"><span class="st ${r.st.cls}">${r.st.label}</span> · ${esc(r.a)}, ${esc(r.c)}</div></div>
+    <div class="end"><b>${fmtKm(r.d,r.p)}</b></div></button>`;
+}
+function drawPick(anim){
+  const r=pickPool[pickIdx];const n=nav(r);const el=$('#pick');
+  $('#pickWhy').textContent=pickMode==='later'?(pickIdx===0?'לזמן הזכאות הבא':`אפשרות ${pickIdx+1} מתוך ${pickPool.length}`)
+    :pickIdx===0?'הכי קרוב שפתוח':`אפשרות ${pickIdx+1} מתוך ${pickPool.length}`;
+  el.innerHTML=`<div class="pick-art">${r.e}</div><div class="pick-body">
+    <div class="eyebrow">${fmtKm(r.d,r.p)} ממך · ${r.k}</div>
+    <h3>${esc(r.n)}</h3>
+    <div class="meta"><span class="st ${r.st.cls}">${r.st.label}</span><span class="dot"></span><span>${esc(r.a)}, ${esc(r.c)}</span></div>
+    <div class="row-btns">
+      <a class="btn primary" href="${n.waze}" target="_blank" rel="noopener">ניווט ב־Waze</a>
+      <button class="btn tint" id="shuffle" aria-label="הצעה אחרת">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+        משהו אחר</button>
+    </div></div>`;
+  el.querySelector('.pick-art').onclick=el.querySelector('h3').onclick=()=>openDetail(rows.indexOf(r));
+  $('#shuffle').onclick=()=>{pickIdx=(pickIdx+1)%pickPool.length;drawPick(true);};
+  if(anim){el.classList.remove('flip');void el.offsetWidth;el.classList.add('flip');}
+}
+function renderChains(){
+  const list=region==='rehovot'?DATA.chains.filter(c=>c.name.includes('מקדונלדס')).map(c=>({...c,name:'מקדונלדס רחובות - כשר',note:'למשרתי רחובות: רק בסניף רחובות'}))
+    :DATA.chains;
+  $('#chains').parentElement.hidden=!list.length;
+  $('#chains').innerHTML=list.map(c=>{const name=c.name.replace('-כשר','').replace(' - כשר','').replace('בונגראנץ','בורגראנץ').trim();
+    const q=encodeURIComponent(name+' כשר');
+    return `<a class="item" href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+    <div class="ico">${emoji(c.name)}</div><div class="mid"><div class="t">${esc(name)}</div><div class="s">${esc(c.note)} · ${esc(c.hours)}</div></div>
+    <div class="end" style="color:var(--accent);font-weight:600">חפש סניף</div></a>`}).join('');
+}
+
+/* ---------- spring sheets (interruptible, drag to dismiss) ---------- */
+function Sheet(el){
+  let y=0,v=0,target=0,raf=0,h=0,open=false;const scrim=$('#scrim');
+  const K=520,D=2*Math.sqrt(K)*0.86; // stiffness / near-critical damping
+  const apply=()=>{el.style.transform=`translateY(${y}px)`;const p=Math.max(0,1-y/Math.max(h,1));scrim.style.opacity=p;};
+  function step(t0){let last=t0;cancelAnimationFrame(raf);
+    const f=t=>{const dt=Math.min(.032,(t-last)/1000);last=t;const a=-K*(y-target)-D*v;v+=a*dt;y+=v*dt;apply();
+      if(Math.abs(v)<.5&&Math.abs(y-target)<.5){y=target;apply();if(!open){el.style.visibility='hidden';}return;}raf=requestAnimationFrame(f);};
+    raf=requestAnimationFrame(f);}
+  this.show=()=>{el.style.visibility='visible';h=el.offsetHeight;if(!open){y=h;}open=true;target=0;scrim.style.pointerEvents='auto';current=this;step(performance.now());};
+  this.hide=(vel=0)=>{h=el.offsetHeight;open=false;target=h+20;v=Math.max(v,vel);scrim.style.pointerEvents='none';if(current===this)current=null;step(performance.now());};
+  el.style.visibility='hidden';
+  // drag
+  let dragging=false,sy=0,y0=0,lt=0,ly=0,vel=0;const content=el.querySelector('.sheet-c');
+  el.addEventListener('pointerdown',e=>{
+    if(e.target.closest('input,a,button:not(.grab)')&&!e.target.closest('.grab'))return;
+    if(content.contains(e.target)&&content.scrollTop>0)return;
+    dragging=true;cancelAnimationFrame(raf);sy=e.clientY;y0=y;lt=performance.now();ly=e.clientY;vel=0;h=el.offsetHeight;});
+  window.addEventListener('pointermove',e=>{if(!dragging)return;let d=e.clientY-sy;
+    if(Math.abs(d)<6&&y0===y)return;el.setPointerCapture?.(e.pointerId);
+    y=y0+(d<0?d*0.25:d); // rubber band upward
+    const t=performance.now();vel=(e.clientY-ly)/Math.max(1,(t-lt))*1000;lt=t;ly=e.clientY;v=vel;apply();});
+  window.addEventListener('pointerup',()=>{if(!dragging)return;dragging=false;
+    if(y>h*0.3||vel>700)this.hide(vel);else{target=0;v=vel;step(performance.now());}});
+}
+let current=null;
+const detail=new Sheet($('#detail')), locSheet=new Sheet($('#locSheet'));
+$('#scrim').onclick=()=>current&&current.hide();
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&current)current.hide();});
+
+function openDetail(i){
+  const r=rows[i];if(!r)return;const n=nav(r);
+  $('#detailC').innerHTML=`<div class="d-art">${r.e}</div>
+    <h2 class="d-h">${esc(r.n)}</h2>
+    <div class="meta"><span class="st ${r.st.cls}">${r.st.label}</span><span class="dot"></span><span>${fmtKm(r.d,r.p)} ממך</span></div>
+    <div class="row-btns">
+      <a class="btn primary" href="${n.waze}" target="_blank" rel="noopener">Waze</a>
+      <a class="btn gray" href="${n.gmaps}" target="_blank" rel="noopener">Google Maps</a>
+    </div>
+    <div class="kv">
+      <div><span>כתובת</span><span>${esc(r.a)}, ${esc(r.c)}</span></div>
+      <div><span>שעות פעילות</span><span dir="ltr">${r.h?r.h[0]+'–'+r.h[1]:esc(r.hr)}</span></div>
+      <div><span>סוג</span><span>${r.k}${r.hk?' · כשרות מהדרין':''}</span></div>
+      ${r.ab?`<div><span>א/ב</span><span>${esc(r.ab)}</span></div>`:''}
+    </div>
+    <p class="note">${r.p?'המרחק מחושב לפי מיקום הכתובת.':'המרחק משוער (ממרכז '+esc(r.c)+'). הניווט מוביל לכתובת המדויקת.'}</p>
+    <div class="row-btns" style="margin-bottom:6px">
+      <button class="btn tint" id="logHere">אכלתי כאן</button>
+      <button class="btn gray" id="copyAddr">העתק כתובת</button>
+    </div>
+    <button class="more" style="margin:4px auto 2px;font-size:14px" data-fb="${esc(r.n)}">דווח על טעות בפרטים</button>`;
+  $('#logHere').onclick=()=>{detail.hide();setTimeout(()=>openMeal(r.n),180);};
+  $('#copyAddr').onclick=async()=>{try{await navigator.clipboard.writeText(`${r.n}, ${r.a}, ${r.c}`);toast('הכתובת הועתקה');}catch(e){toast('לא ניתן להעתיק כאן');}};
+  detail.show();
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-i]');if(b&&!e.target.closest('#pick'))openDetail(+b.dataset.i);});
+
+/* ---------- location ---------- */
+function drawLocs(){
+  const q=$('#locQ').value.trim();
+  const list=PLACES.filter(p=>!q||p[0].includes(q));
+  $('#locs').innerHTML=list.map(p=>{
+    const near=rows.length?DATA.r.filter(r=>km(p[1],p[2],r.lat,r.lng)<=10).length:0;
+    return `<button data-p="${esc(p[0])}" class="${p[0]===here.name?'sel':''}"><span>${esc(p[0])}</span><small>${near?near+' בטווח 10 ק״מ':''}</small></button>`}).join('')
+    ||`<div class="empty">לא נמצא. נסה עיר קרובה.</div>`;
+}
+$('#locs').addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(!b)return;const p=PLACES.find(x=>x[0]===b.dataset.p);
+  setHere({name:p[0],lat:p[1],lng:p[2],gps:false});locSheet.hide();});
+$('#locQ').addEventListener('input',drawLocs);
+$('#locBtn').onclick=()=>{$('#locQ').value='';drawLocs();$('#gpsMsg').hidden=true;locSheet.show();};
+function setHere(h){here=h;save('here',h);shown=25;pickIdx=0;compute();render();window.scrollTo({top:0,behavior:'smooth'});toast('📍 '+h.name);}
+function nearestPlace(lat,lng){let best=PLACES[0],bd=1e9;for(const p of PLACES){const d=km(lat,lng,p[1],p[2]);if(d<bd){bd=d;best=p}}return{p:best,d:bd};}
+function tryGPS(fromUser){
+  const msg=$('#gpsMsg');
+  const fail=()=>{if(fromUser){msg.hidden=false;msg.textContent='לא הצלחתי לקבל מיקום מהמכשיר בתצוגה הזו. בחר את היישוב הקרוב אליך מהרשימה.';}};
+  if(!navigator.geolocation)return fail();
+  try{navigator.geolocation.getCurrentPosition(pos=>{
+      const{latitude:la,longitude:lo}=pos.coords;const n=nearestPlace(la,lo);
+      setHere({name:n.d<4?n.p[0]:'ליד '+n.p[0],lat:la,lng:lo,gps:true});if(fromUser)locSheet.hide();},
+    fail,{enableHighAccuracy:true,timeout:8000,maximumAge:120000});}catch(e){fail();}
+}
+$('#gpsBtn').onclick=()=>tryGPS(true);
+
+/* ---------- budget ---------- */
+const CAP={month:594,uses:12,day:44.5,burger:52};
+const mealSheet=new Sheet($('#mealSheet'));
+let meals=load('meals',[]);
+const todayIL=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jerusalem'}).format(new Date());
+const dow=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(Date.UTC(y,m-1,d)).getUTCDay();};
+const money=n=>(Math.round(n*10)/10).toLocaleString('he-IL',{maximumFractionDigits:1});
+const monthMeals=()=>{const k=todayIL().slice(0,7);return meals.filter(m=>m.date.startsWith(k)).sort((a,b)=>b.date.localeCompare(a.date)||b.ts-a.ts);};
+function daysLeft(hasToday){const t=todayIL();const[y,m,d]=t.split('-').map(Number);const last=new Date(Date.UTC(y,m,0)).getUTCDate();
+  const now=nowIL();let n=0;for(let i=d;i<=last;i++){const w=new Date(Date.UTC(y,m-1,i)).getUTCDay();if(w>4)continue;
+    if(i===d&&(hasToday||now.min>=WIN.c))continue;n++;}return n;}
+function renderBudget(){
+  const mm=monthMeals(),used=mm.reduce((s,m)=>s+m.amount,0),left=Math.max(0,CAP.month-used),usesLeft=Math.max(0,CAP.uses-mm.length);
+  const t=todayIL(),hasToday=mm.some(m=>m.date===t),now=nowIL(),ws=winState(now);
+  $('#budMonth').textContent='יתרת תקציב · '+new Intl.DateTimeFormat('he-IL',{timeZone:'Asia/Jerusalem',month:'long'}).format(new Date());
+  $('#budAmt').innerHTML=`${money(left)} <span>₪</span>`;
+  $('#budBar').style.width=(left/CAP.month*100)+'%';
+  $('#budUsed').textContent=`נוצלו ${money(used)} ₪ ב־${mm.length} ארוחות`;
+  const w=$('#win');w.textContent=ws.label;w.classList.toggle('on',ws.on);
+  const eligibleToday=WIN.days.includes(now.day);
+  $('#sToday').textContent=hasToday?'נוצל':!eligibleToday?'—':money(Math.min(CAP.day,left));
+  $('#sToday').nextElementSibling.textContent=hasToday?'הזכאות להיום':eligibleToday?'₪ להיום (52 בהמבורגר)':'אין זכאות היום';
+  $('#sUses').textContent=usesLeft;
+  const dl=daysLeft(hasToday);$('#sDays').textContent=dl;
+  $('#hist').innerHTML=mm.length?mm.map(m=>`<div class="hist-i"><div class="mid"><div>${esc(m.place||'ארוחה')}</div>
+      <small>${new Intl.DateTimeFormat('he-IL',{weekday:'short',day:'numeric',month:'numeric'}).format(new Date(m.date+'T12:00:00'))}</small></div>
+      <b>${money(m.amount)} ₪</b><button class="x" data-del="${m.id}" aria-label="מחק">✕</button></div>`).join('')
+    :`<div class="empty" style="padding:16px 0">עוד לא נרשמו ארוחות החודש</div>`;
+  $('#sync').textContent=LS?'🔒 הנתונים נשמרים רק במכשיר שלך ולא נשלחים לאף אחד':'⚠️ הדפדפן הזה לא מאפשר שמירה. הרישום יימחק כשתסגור את הדף';
+}
+$('#histBtn').onclick=()=>{const h=$('#hist');h.hidden=!h.hidden;$('#histBtn').textContent=h.hidden?'היסטוריה':'הסתר';};
+$('#hist').addEventListener('click',async e=>{const b=e.target.closest('[data-del]');if(!b)return;const id=b.dataset.del;
+  const m=meals.find(x=>x.id===id);meals=meals.filter(x=>x.id!==id);persist();renderBudget();
+  toast('הארוחה נמחקה');});
+function persist(){save('meals',meals);}
+
+let mealIsBurger=false;
+function openMeal(place){
+  $('#mPlace').value=place||'';$('#mSugg').innerHTML='';
+  mealIsBurger=!!place&&emoji(place)==='🍔';
+  $('#mAmt').value=mealIsBurger?CAP.burger:CAP.day;$('#mDate').value=todayIL();checkMeal();mealSheet.show();
+}
+function checkMeal(){
+  const a=parseFloat($('#mAmt').value)||0,d=$('#mDate').value,mm=meals.filter(m=>m.date.slice(0,7)===(d||todayIL()).slice(0,7));
+  const used=mm.reduce((s,m)=>s+m.amount,0),w=[];
+  if(a<=0)w.push('הזן סכום');
+  if(a>CAP.burger)w.push('הסכום מעל התקרה היומית (44.5 ₪, המבורגר 52 ₪). ההפרש עליך.');
+  else if(a>CAP.day&&!mealIsBurger)w.push('התקרה היא 44.5 ₪ ליום. 52 ₪ רק בהמבורגר.');
+  if(d&&mm.some(m=>m.date===d))w.push('כבר רשמת ארוחה בתאריך הזה. הזכאות יומית.');
+  if(mm.length>=CAP.uses)w.push('ניצלת כבר 12 מימושים בחודש הזה.');
+  if(used+a>CAP.month)w.push(`הסכום גבוה מהיתרה החודשית (${money(Math.max(0,CAP.month-used))} ₪).`);
+  if(d&&dow(d)>4)w.push('הזכאות היא בימים א׳–ה׳ בלבד.');
+  $('#mWarn').innerHTML=w.map(esc).join('<br>');
+  $('#mSave').textContent=w.length&&a>0?'שמור בכל זאת':'שמור';$('#mSave').disabled=a<=0;$('#mSave').style.opacity=a>0?1:.4;
+}
+$('#mAmt').addEventListener('input',checkMeal);$('#mDate').addEventListener('change',checkMeal);
+document.querySelectorAll('#mealSheet .step').forEach(b=>b.onclick=()=>{const v=(parseFloat($('#mAmt').value)||0)+(+b.dataset.s);$('#mAmt').value=Math.max(0,Math.round(v*10)/10);checkMeal();});
+document.querySelectorAll('#mealSheet .quick button').forEach(b=>b.onclick=()=>{$('#mAmt').value=b.dataset.q;mealIsBurger=b.dataset.q==='52'||mealIsBurger;checkMeal();});
+$('#mPlace').addEventListener('input',()=>{const q=$('#mPlace').value.trim();mealIsBurger=emoji(q)==='🍔';checkMeal();
+  $('#mSugg').innerHTML=q.length<2?'':rows.filter(r=>r.n.includes(q)||r.c.includes(q)).slice(0,6)
+    .map(r=>`<button data-n="${esc(r.n)}">${esc(r.n)} <small>· ${esc(r.c)}</small></button>`).join('');});
+$('#mSugg').addEventListener('click',e=>{const b=e.target.closest('[data-n]');if(!b)return;$('#mPlace').value=b.dataset.n;$('#mSugg').innerHTML='';
+  mealIsBurger=emoji(b.dataset.n)==='🍔';if(mealIsBurger)$('#mAmt').value=CAP.burger;checkMeal();});
+$('#addMeal').onclick=()=>{const r=pickPool[pickIdx];openMeal('');};
+$('#mSave').onclick=async()=>{
+  const a=parseFloat($('#mAmt').value)||0;if(a<=0)return;
+  const m={id:'m'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),date:$('#mDate').value||todayIL(),amount:a,place:$('#mPlace').value.trim(),ts:Date.now()};
+  meals.push(m);persist();renderBudget();mealSheet.hide();toast(`נרשם · נשארו ${money(Math.max(0,CAP.month-monthMeals().reduce((s,x)=>s+x.amount,0)))} ₪`);
+};
+
+/* region */
+function drawSeg(){const seg=$('#seg'),b=seg.querySelector(`[data-r="${region}"]`)||seg.querySelector('[data-r="all"]'),k=seg.querySelector('.knob');
+  k.style.width=b.offsetWidth+'px';k.style.right=(seg.offsetWidth-b.offsetLeft-b.offsetWidth)+'px';
+  seg.querySelectorAll('button').forEach(x=>x.style.color=x===b?'var(--label)':'var(--label2)');
+  $('#regionNote').textContent=REGIONS[region]?REGIONS[region].note:'מציג את כל המסעדות ברשימה. בחר את מקום השירות שלך כדי לראות רק את המסעדות שמותרות לך.';}
+$('#seg').addEventListener('click',e=>{const b=e.target.closest('[data-r]');if(!b)return;region=b.dataset.r;save('region',region);
+  drawSeg();renderChains();shown=25;pickIdx=0;render();toast(b.textContent);});
+window.addEventListener('resize',drawSeg);
+
+/* ---------- feedback ---------- */
+const FEEDBACK_WA='972508992282'; // international format, digits only
+const fbSheet=new Sheet($('#fbSheet'));let fbType='תקלה באפליקציה';
+function fbLink(){const rest=$('#fbRest').value.trim(),txt=$('#fbText').value.trim();
+  const msg=`📝 אוכלים בחוגר · ${fbType}\n${rest?'מסעדה: '+rest+'\n':''}\n${txt}`;
+  const ok=txt.length>2;const a=$('#fbSend');a.href=`https://wa.me/${FEEDBACK_WA}?text=${encodeURIComponent(msg)}`;
+  a.style.opacity=ok?1:.4;a.style.pointerEvents=ok?'auto':'none';}
+function openFb(rest){fbType=rest?'טעות בפרטי מסעדה':'תקלה באפליקציה';$('#fbRest').value=rest||'';$('#fbText').value='';drawFbTypes();fbLink();
+  if(current)current.hide();setTimeout(()=>fbSheet.show(),current?180:0);}
+function drawFbTypes(){document.querySelectorAll('#fbTypes button').forEach(b=>b.classList.toggle('on',b.dataset.t===fbType));
+  $('#fbRestWrap').hidden=!(fbType==='טעות בפרטי מסעדה'||fbType==='מסעדה חסרה');}
+$('#fbTypes').addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(!b)return;fbType=b.dataset.t;drawFbTypes();fbLink();});
+$('#fbRest').addEventListener('input',fbLink);$('#fbText').addEventListener('input',fbLink);
+$('#fbSend').addEventListener('click',()=>setTimeout(()=>{fbSheet.hide();toast('תודה! 🙏');},300));
+document.addEventListener('click',e=>{const b=e.target.closest('[data-fb]');if(b){e.preventDefault();e.stopPropagation();openFb(b.dataset.fb);}},true);
+
+/* ---------- misc ---------- */
+let tt;function toast(s){const t=$('#toast');t.textContent=s;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1600);}
+$('#chips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;const f=c.dataset.f;
+  filters.has(f)?filters.delete(f):filters.add(f);save('filters',[...filters]);shown=25;pickIdx=0;render();});
+let qt;$('#q').addEventListener('input',e=>{clearTimeout(qt);qt=setTimeout(()=>{query=e.target.value.trim().toLowerCase();shown=25;render();},120);});
+$('#more').onclick=()=>{shown+=25;render();};
+window.addEventListener('scroll',()=>$('#nav').classList.toggle('scrolled',scrollY>40),{passive:true});
+setInterval(()=>{compute();render();renderBudget();},60000);
+
+compute();renderChains();render();renderBudget();requestAnimationFrame(drawSeg);
+if(here.gps)tryGPS(false);
+if(firstVisit)setTimeout(()=>{$('#locQ').value='';drawLocs();locSheet.show();},500);
+</script>
+</body>
+</html>
